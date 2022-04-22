@@ -1,7 +1,9 @@
 {
     "autoload": {
         "psr-4": {
-            "Framework\\": "src/Framework"
+            "Framework\\": "src/Framework",
+            "App\\": "src",
+            "Tests\\": "tests"
         }
     },
     "require": {
@@ -16,8 +18,7 @@
         "symfony/mailer": "^6.0",
         "ramsey/uuid": "^4.3",
         "stripe/stripe-php": "^7.123",
-        "spaze/vat-calculator": "^1.5",
-        "squizlabs/php_codesniffer": "^3.6"
+        "spaze/vat-calculator": "^1.5"
     },
     "require-dev": {
         "dms/phpunit-arraysubset-asserts": "^0.4.0",
@@ -25,6 +26,7 @@
         "filp/whoops": "^2.14",
         "fakerphp/faker": "^1.19",
         "robmorgan/phinx": "^0.12.10",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
     }
 }
