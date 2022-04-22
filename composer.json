@@ -1,0 +1,30 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "src/Framework"
+        }
+    },
+    "require": {
+        "php-di/php-di": "^6.4",
+        "doctrine/cache": "^2.1",
+        "pagerfanta/pagerfanta": "^3.6",
+        "twig/twig": "^3.3",
+        "http-interop/response-sender": "^1.0",
+        "guzzlehttp/psr7": "^2.2",
+        "intervention/image": "^2.7",
+        "mezzio/mezzio-fastroute": "^3.5",
+        "symfony/mailer": "^6.0",
+        "ramsey/uuid": "^4.3",
+        "stripe/stripe-php": "^7.123",
+        "spaze/vat-calculator": "^1.5",
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "require-dev": {
+        "dms/phpunit-arraysubset-asserts": "^0.4.0",
+        "symfony/var-dumper": "^6.0",
+        "filp/whoops": "^2.14",
+        "fakerphp/faker": "^1.19",
+        "robmorgan/phinx": "^0.12.10",
+        "phpunit/phpunit": "^9.5"
+    }
+}
