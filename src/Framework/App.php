@@ -23,11 +23,14 @@ class App
      */
     private $router;
 
-    public function __construct(array $modules = [])
+    public function __construct(array $modules = [], $dependancies = [])
     {
         $this->router = new Router;
+        if ($dependancies['renderer']) {
+            $dependancies['renderer']->addGlobal('router', $this->router);
+        }
         foreach ($modules as $module) {
-            $this->modules[] = new $module($this->router);
+            $this->modules[] = new $module($this->router, $dependancies['renderer']);
         }
     }
 
