@@ -20,7 +20,7 @@ class Route
     /**
      * callback
      *
-     * @var callable
+     * @var callable|string
      */
     private $callback;
     
@@ -31,7 +31,7 @@ class Route
      */
     private $params;
 
-    public function __construct(string $name, callable $callback, array $params)
+    public function __construct(string $name, $callback, array $params)
     {
         $this->name = $name;
         $this->callback = $callback;
@@ -51,9 +51,9 @@ class Route
     /**
      * Le traitement effectué par la route
      *
-     * @return callable
+     * @return callable|string
      */
-    public function getCallback(): callable
+    public function getCallback()
     {
         return $this->callback;
     }

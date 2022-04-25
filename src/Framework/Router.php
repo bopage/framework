@@ -24,11 +24,11 @@ class Router
      * Enregistrement des routes
      *
      * @param  string $path
-     * @param  callable $callback
+     * @param  callable|string $callback
      * @param  string $name
      * @return void
      */
-    public function get(string $path, callable $callback, string $name)
+    public function get(string $path, $callback, string $name)
     {
         $this->router->addRoute(new RouterRoute($path, new CallableMiddleware($callback), ['GET'], $name));
     }

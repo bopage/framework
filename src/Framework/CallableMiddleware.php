@@ -19,11 +19,11 @@ class CallableMiddleware implements MiddlewareInterface
     /**
      * Le traitement de la function
      *
-     * @var mixed
+     * @var callable|string
      */
     private $callable;
 
-    public function __construct(callable $callable)
+    public function __construct($callable)
     {
         $this->callable = $callable;
     }
@@ -32,9 +32,9 @@ class CallableMiddleware implements MiddlewareInterface
     /**
      * Return la function
      *
-     * @return callable
+     * @return callable|string
      */
-    public function getCallable(): callable
+    public function getCallable()
     {
         return $this->callable;
     }

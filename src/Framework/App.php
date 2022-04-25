@@ -4,6 +4,7 @@ namespace Framework;
 
 use Exception;
 use GuzzleHttp\Psr7\Response;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class App
@@ -19,18 +20,15 @@ class App
     /**
      * router
      *
-     * @var Router
+     * @var ContainerInterface
      */
-    private $router;
+    private $container;
 
-    public function __construct(array $modules = [], $dependancies = [])
+    public function __construct(ContainerInterface $container, array $modules = [],)
     {
-        $this->router = new Router;
-        if ($dependancies['renderer']) {
-            $dependancies['renderer']->addGlobal('router', $this->router);
-        }
+        $this->container = $container;
         foreach ($modules as $module) {
-            $this->modules[] = new $module($this->router, $dependancies['renderer']);
+            $this->modules[] = $this->container->get($module);
         }
     }
 
@@ -42,7 +40,8 @@ class App
                 ->withStatus(301)
                 ->withHeader('Location', substr($uri, 0, -1));
         }
-        $route = $this->router->match($request);
+        $router = $this->container->get(Router::class);
+        $route = $router->match($request);
         if (is_null($route)) {
             return new Response(404, [], '<h1>Error 404</h1>');
         }
@@ -50,7 +49,11 @@ class App
         $request = array_reduce(array_keys($params), function ($request, $key) use ($params) {
             return $request->withAttribute($key, $params[$key]);
         }, $request);
-        $reponse = call_user_func($route->getCallback(), $request);
+        $callback = $route->getCallback();
+        if (is_string($callback)) {
+            $callback = $this->container->get($callback);
+        }
+        $reponse = call_user_func_array($callback, [$request]);
         if (is_string($reponse)) {
             return new Response(200, [], $reponse);
         } elseif ($reponse instanceof Response) {
