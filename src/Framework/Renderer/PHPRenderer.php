@@ -1,12 +1,12 @@
 <?php
 
-namespace Framework;
+namespace Framework\Renderer;
 
 /**
  * Renderer
  * Permet d'ajouter et rendre les vues
  */
-class Renderer
+class PHPRenderer implements RendererInterface
 {
     const DEFAUTL_PATH = '__MAIN';
 
@@ -25,6 +25,16 @@ class Renderer
      */
     private $globals = [];
 
+
+
+
+    public function __construct(?string $defaultPath = null)
+    {
+        if (!is_null($defaultPath)) {
+            $this->addPath($defaultPath);
+        }
+    }
+
     /**
      * Permet d'ajouter le chemin qui correspond à une vue
      *
@@ -32,7 +42,7 @@ class Renderer
      * @param  string $path
      * @return void
      */
-    public function addPath(string $namespace, ?string $path = null)
+    public function addPath(string $namespace, ?string $path = null): void
     {
         if (is_null($path)) {
             $this->paths[self::DEFAUTL_PATH] = $namespace;
@@ -74,9 +84,9 @@ class Renderer
      * @param  mixed $value
      * @return void
      */
-    public function addGlobal(string $key, mixed $value)
+    public function addGlobal(string $key, mixed $value): void
     {
-        return $this->globals[$key] = $value;
+        $this->globals[$key] = $value;
     }
 
     private function hasNamespace(string $view): bool
