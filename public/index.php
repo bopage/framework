@@ -3,13 +3,11 @@
 use App\Blog\BlogModule;
 use DI\ContainerBuilder;
 use Framework\App;
-use Framework\Renderer\PHPRenderer;
-use Framework\Renderer\TwigRenderer;
 use GuzzleHttp\Psr7\ServerRequest;
 
 use function Http\Response\send;
 
-require '../vendor/autoload.php';
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
 
 $whoops = new \Whoops\Run;
@@ -34,5 +32,7 @@ $container = $builder->build();
 
 $app = new App($container, $modules);
 
-$response = $app->run(ServerRequest::fromGlobals());
-send($response);
+if (php_sapi_name() !== 'cli') {
+    $response = $app->run(ServerRequest::fromGlobals());
+    send($response);
+}

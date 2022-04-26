@@ -62,4 +62,9 @@ class App
             throw new Exception('La reponse n\'est une chaîne de caractère ou une instance de Response');
         }
     }
+
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
 }

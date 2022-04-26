@@ -10,6 +10,10 @@ use function DI\factory;
 use function DI\get;
 
 return [
+    'database.host' => 'localhost',
+    'database.name' => 'monsupersite',
+    'database.username' => 'root',
+    'database.password' => 'root',
     'views.path' => dirname(__DIR__). '/views',
     'twig.extensions' => [
         get(RouterTwigExtension::class)
