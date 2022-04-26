@@ -1,10 +1,12 @@
 {% extends 'layout.twig' %}
 
+
 {% block body %}
-<h1>Bienvenue le Monde</h1>
+<h1>Bienvenue le Blog</h1>
 <ul>
-    <li><a href={{ path('blog.show', {slug: 'zerrer-7afeff'}) }}>Article 1</a> </li>
-    <li>Article 1</li>
+{% for post in posts %}
+    <li><a href={{ path('blog.show', {slug: post.slug, id: post.id}) }}> {{ post.name }} </a> </li>
+    {% endfor %}
 </ul>
 
 {% endblock %}

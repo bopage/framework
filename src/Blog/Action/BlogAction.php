@@ -2,12 +2,16 @@
 
 namespace App\Blog\Action;
 
+use App\Blog\PostTable;
+use Framework\Action\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
+use Framework\Router;
+use PDO;
 use Psr\Http\Message\ServerRequestInterface;
 
 class BlogAction
 {
-    
+
     /**
      * RendererInterface
      *
@@ -15,11 +19,21 @@ class BlogAction
      */
     private $renderer;
 
-    public function __construct(RendererInterface $renderer)
+    private $pdo;
+
+    private $router;
+
+    private $postTable;
+
+    use RouterAwareAction;
+
+    public function __construct(RendererInterface $renderer, Router $router, PostTable $postTable)
     {
         $this->renderer = $renderer;
+        $this->postTable = $postTable;
+        $this->router = $router;
     }
-        
+
     /**
      * __invoke
      * Permet de render la class callable
@@ -29,9 +43,8 @@ class BlogAction
      */
     public function __invoke(ServerRequestInterface $request)
     {
-        $slug = $request->getAttribute('slug');
-        if ($slug) {
-            return $this->show($slug);
+        if ($request->getAttribute('id')) {
+            return $this->show($request);
         }
         return $this->index();
     }
@@ -43,19 +56,28 @@ class BlogAction
      */
     public function index(): string
     {
-        return $this->renderer->render('@blog/index');
+        $posts = $this->postTable->findPagineted();
+        return $this->renderer->render('@blog/index', compact('posts'));
     }
-    
+
     /**
      * Renvoie la vue correspondant à un article
      *
      * @param  string $slug
-     * @return string
+     * @return string|ResponseInterface
      */
-    public function show(string $slug): string
+    public function show(ServerRequestInterface $request)
     {
+        $slug = $request->getAttribute('slug');
+        $post = $this->postTable->find($request->getAttribute('id'));
+        if ($post->slug !== $slug) {
+            return $this->redirect('blog.show', [
+                'slug' => $post->slug,
+                'id' => $post->id
+            ]);
+        }
         return $this->renderer->render('@blog/show', [
-            'slug' => $slug
+            'post' => $post
         ]);
     }
 }

@@ -40,7 +40,7 @@ class Router
      * @param  array $params
      * @return string
      */
-    public function generateUri(string $name, array $params): string
+    public function generateUri(string $name, array $params)
     {
         return $this->router->generateUri($name, $params);
     }
