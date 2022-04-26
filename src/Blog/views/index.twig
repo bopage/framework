@@ -2,11 +2,34 @@
 
 
 {% block body %}
+
 <h1>Bienvenue le Blog</h1>
-<ul>
-{% for post in posts %}
-    <li><a href={{ path('blog.show', {slug: post.slug, id: post.id}) }}> {{ post.name }} </a> </li>
+
+ {% for row in posts | batch(4) %}
+
+{% for post in row %}
+<h2>{{ post.name }} </h2>
+<p>
+{{post.content |  excerpt | nl2br}}
+</p>
+
+<p>
+
+{{ post.created_at | ago }}
+
+</p>
+
+
+<p>
+
+   <a href={{ path('blog.show', {slug: post.slug, id: post.id}) }}> Voir plus</a> 
+
+</p>
     {% endfor %}
-</ul>
+
+    {% endfor %}
+
+
+{{ paginate(posts, 'blog.index',)}}
 
 {% endblock %}

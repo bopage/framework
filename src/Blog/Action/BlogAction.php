@@ -2,11 +2,10 @@
 
 namespace App\Blog\Action;
 
-use App\Blog\PostTable;
+use App\Blog\Table\PostTable;
 use Framework\Action\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
-use PDO;
 use Psr\Http\Message\ServerRequestInterface;
 
 class BlogAction
@@ -46,7 +45,7 @@ class BlogAction
         if ($request->getAttribute('id')) {
             return $this->show($request);
         }
-        return $this->index();
+        return $this->index($request);
     }
 
     /**
@@ -54,9 +53,10 @@ class BlogAction
      *
      * @return string
      */
-    public function index(): string
+    public function index(ServerRequestInterface $request): string
     {
-        $posts = $this->postTable->findPagineted();
+        $params = $request->getQueryParams();
+        $posts = $this->postTable->findPagineted(12, $params['p'] ?? 1);
         return $this->renderer->render('@blog/index', compact('posts'));
     }
 
