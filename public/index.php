@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\AdminModule;
 use App\Blog\BlogModule;
 use DI\ContainerBuilder;
 use Framework\App;
@@ -15,6 +16,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
 $modules = [
+    AdminModule::class,
     BlogModule::class
 ];
 

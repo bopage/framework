@@ -38,7 +38,7 @@ class RouterTwigExtension extends AbstractExtension
         ];
     }
 
-    public function pathFor(string $name, array $params): string
+    public function pathFor(string $name, array $params = []): string
     {
         return $this->router->generateUri($name, $params);
     }

@@ -3,33 +3,47 @@
 
 {% block body %}
 
-<h1>Bienvenue le Blog</h1>
-
- {% for row in posts | batch(4) %}
-
-{% for post in row %}
-<h2>{{ post.name }} </h2>
-<p>
-{{post.content |  excerpt | nl2br}}
-</p>
-
-<p>
-
-{{ post.created_at | ago }}
-
-</p>
+	<h1 class="mt-4 mb-4 text-center">BIENVENUE SUR LE BLOG</h1>
 
 
-<p>
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+		{% for post in posts %}
+			<div class="col">
+				<div class="card shadow-sm">
+					<h2>{{ post.name }}
+					</h2>
+					<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveaspectratio="xMidYMid slice" focusable="false">
+						<title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+					</svg>
 
-   <a href={{ path('blog.show', {slug: post.slug, id: post.id}) }}> Voir plus</a> 
+					<div class="card-body">
+						<p>
 
-</p>
-    {% endfor %}
+							{{ post.created_at | ago }}
 
-    {% endfor %}
+						</p>
+						<p class="card-text">
+							{{post.content |  excerpt | nl2br}}
+						</p>
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="btn-group">
+								<button type="button" class="btn btn-sm btn-outline-secondary">
+									<a href={{ path('blog.show', {slug: post.slug, id: post.id} ) }}>
+										Voir plus</a>
+								</button>
+							</div>
+							<small class="text-muted">
+								{{ post.created_at | ago }}
+							</small>
+						</div>
+					</div>
+				</div>
+			</div>
 
 
-{{ paginate(posts, 'blog.index',)}}
+		{% endfor %}
 
-{% endblock %}
+
+		{{ paginate(posts, 'blog.index',)}}
+
+	{% endblock %}

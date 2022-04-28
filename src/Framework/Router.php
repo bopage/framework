@@ -21,16 +21,63 @@ class Router
     }
 
     /**
-     * Enregistrement des routes
+     * Enregistrement des routes en GET
      *
      * @param  string $path
      * @param  callable|string $callback
      * @param  string $name
      * @return void
      */
-    public function get(string $path, $callback, string $name)
+    public function get(string $path, $callback, ?string $name = null)
     {
         $this->router->addRoute(new RouterRoute($path, new CallableMiddleware($callback), ['GET'], $name));
+    }
+
+       /**
+     * Enregistrement des routes en POST
+     *
+     * @param  string $path
+     * @param  callable|string $callback
+     * @param  string $name
+     * @return void
+     */
+    public function post(string $path, $callback, ?string $name = null)
+    {
+        $this->router->addRoute(new RouterRoute($path, new CallableMiddleware($callback), ['POST'], $name));
+    }
+
+       /**
+     * Enregistrement des routes en DELETE
+     *
+     * @param  string $path
+     * @param  callable|string $callback
+     * @param  string $name
+     * @return void
+     */
+    public function delete(string $path, $callback, ?string $name = null)
+    {
+        $this->router->addRoute(new RouterRoute($path, new CallableMiddleware($callback), ['DELETE'], $name));
+    }
+    
+    /**
+     * Definition de CRUD
+     *
+     * @param  string $prefix
+     * @param  string $callable
+     * @param  string $prefixName
+     * @return void
+     */
+    public function crud(string $prefix, string $callable, string $prefixName)
+    {
+        $this->get("$prefix", $callable, "$prefixName.index");
+        //new
+        $this->get("$prefix/new", $callable, "$prefixName.new");
+        $this->post("$prefix/new", $callable);
+        //edit
+        $this->get("$prefix/{id:\d+}", $callable, "$prefixName.edit");
+        $this->post("$prefix/{id:\d+}", $callable);
+        //delete
+        $this->delete("$prefix/{id:\d+}", $callable, "$prefixName.delete");
     }
     
     /**

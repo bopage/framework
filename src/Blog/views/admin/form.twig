@@ -1,0 +1,15 @@
+<div class="mb-3">
+  <label for="name" class="form-label">Titre de l'article</label>
+  <input type="text" class="form-control" name="name" id="name" value="{{ item.name }} ">
+</div>
+
+<div class="mb-3">
+  <label for="slug" class="form-label">Titre du Slug</label>
+  <input type="text" class="form-control" name="slug" id="slug" value="{{ item.slug }} ">
+</div>
+
+
+<div class="mb-3">
+  <label for="content" class="form-label">Contenu</label>
+  <textarea class="form-control" id="content" name="content" rows="10">{{item.content | nl2br}}</textarea>
+</div>
