@@ -31,7 +31,19 @@
 			</nav>
 		</header>
 
-		<main class="container">
+		<main class="container mt-4">
+			{% if flash('success') %}
+			<div class="alert alert-success">
+				{{ flash('success')}}
+			</div>
+			{% endif %}
+
+			{% if flash('error') %}
+			<div class="alert alert-danger">
+				{{ flash('error')}}
+			</div>
+			{% endif %}
+
 			{% block body %}{% endblock %}
 		</main>
 	</body>

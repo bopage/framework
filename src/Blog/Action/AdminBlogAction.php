@@ -6,6 +6,8 @@ use App\Blog\Table\PostTable;
 use Framework\Action\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
+use Framework\Session\FlashService;
+use Framework\Session\SessionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AdminBlogAction
@@ -24,13 +26,20 @@ class AdminBlogAction
 
     private $postTable;
 
+    private $flashService;
+
     use RouterAwareAction;
 
-    public function __construct(RendererInterface $renderer, Router $router, PostTable $postTable)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        Router $router,
+        PostTable $postTable,
+        FlashService $flashService
+    ) {
         $this->renderer = $renderer;
         $this->postTable = $postTable;
         $this->router = $router;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -81,6 +90,7 @@ class AdminBlogAction
             $params = $this->getParams($request);
             $params['updated_at'] = date('Y-m-d H:i');
             $this->postTable->update($item->id, $params);
+            $this->flashService->success('L\'article a bien été modifié');
             return $this->redirect('blog.admin.index');
         }
         return $this->renderer->render('@blog/admin/edit', compact('item'));
@@ -101,6 +111,7 @@ class AdminBlogAction
                 'created_at' => date('Y-m-d H:i')
             ]);
             $this->postTable->insert($params);
+            $this->flashService->success('L\'article a bien été crée');
             return $this->redirect('blog.admin.index');
         }
         return $this->renderer->render('@blog/admin/new');
@@ -116,6 +127,7 @@ class AdminBlogAction
     {
         $this->postTable->delete($request->getAttribute('id'));
         
+        $this->flashService->success('L\'article a bien été supprimé');
         return $this->redirect('blog.admin.index');
     }
 
