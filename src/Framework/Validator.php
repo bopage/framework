@@ -4,7 +4,7 @@ namespace Framework;
 use DateTime;
 use Framework\Validator\ValidatorErrors;
 
-class Validator 
+class Validator
 {
     private $params;
 
@@ -23,7 +23,7 @@ class Validator
      */
     public function required(string ...$keys): self
     {
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = $this->getValue($key);
             if (is_null($value)) {
                 $this->addError($key, 'required');
@@ -41,7 +41,7 @@ class Validator
      */
     public function notEmpty(string ...$keys): self
     {
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = $this->getValue($key);
             if (is_null($value) || empty($value)) {
                 $this->addError($key, 'empty');
@@ -64,8 +64,7 @@ class Validator
     {
         $value = $this->getValue($key);
         $length = mb_strlen($value);
-        if (
-            !is_null($min) && !is_null($max) && 
+        if (!is_null($min) && !is_null($max) &&
             $length < $min && $length > $max
         ) {
             $this->addError($key, 'betweeLength', [$min, $max]);
@@ -89,7 +88,7 @@ class Validator
     public function slug(string $key): self
     {
         $value = $this->getValue($key);
-        $pattern = '/^([a-z0-9]+-?)+$/';
+        $pattern = '/^[a-z0-9]+(-[a-z0-9]+?)*$/';
         if (!is_null($value) && !preg_match($pattern, $value)) {
             $this->addError($key, 'slug');
         }
@@ -141,7 +140,8 @@ class Validator
      * @param  string $rule
      * @return void
      */
-    private  function addError(string $key, string $rule, array $attributes = []) {
+    private function addError(string $key, string $rule, array $attributes = [])
+    {
         $this->errors[$key] = new ValidatorErrors($key, $rule, $attributes);
     }
     
@@ -151,7 +151,7 @@ class Validator
      * @param  string $key
      * @return string|null
      */
-    private function  getValue(string $key): ?string 
+    private function getValue(string $key): ?string
     {
         if (array_key_exists($key, $this->params)) {
             return $this->params[$key];

@@ -2,7 +2,9 @@
 
 namespace App\Blog\Action;
 
+use App\Blog\Entity\Post;
 use App\Blog\Table\PostTable;
+use DateTime;
 use Framework\Action\RouterAwareAction;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
@@ -86,10 +88,10 @@ class AdminBlogAction
      */
     public function edit(ServerRequestInterface $request)
     {
+        $errors = null;
         $item = $this->postTable->find($request->getAttribute('id'));
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params['updated_at'] = date('Y-m-d H:i');
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
                 $this->postTable->update($item->id, $params);
@@ -97,9 +99,8 @@ class AdminBlogAction
                 return $this->redirect('blog.admin.index');
             }
             $errors = $valid->getErrors();
-           $params['id'] =  $item->id;
+            $params['id'] =  $item->id;
             $item = $params;
-           
         }
         return $this->renderer->render('@blog/admin/edit', compact('item', 'errors'));
     }
@@ -113,13 +114,10 @@ class AdminBlogAction
     public function create(ServerRequestInterface $request)
     {
         $errors = [];
-        $item = null;
+        $item = new Post;
+        $item->created_at = new DateTime();
         if ($request->getMethod() === 'POST') {
             $params = $this->getParams($request);
-            $params = array_merge($params, [
-                'updated_at' => date('Y-m-d H:i'),
-                'created_at' => date('Y-m-d H:i')
-            ]);
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
                 $this->postTable->insert($params);
@@ -149,18 +147,23 @@ class AdminBlogAction
 
     private function getParams(ServerRequestInterface $request)
     {
-        return array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, ['name', 'slug', 'content']);
+        $params =  array_filter($request->getParsedBody(), function ($key) {
+            return in_array($key, ['name', 'slug', 'content', 'created_at']);
         }, ARRAY_FILTER_USE_KEY);
+        
+        return array_merge($params, [
+            'updated_at' => date('Y-m-d H:i')
+        ]);
     }
 
     private function getValidator(ServerRequestInterface $request)
     {
         return (new Validator($request->getParsedBody()))
-                ->required('name', 'slug', 'content')
+                ->required('name', 'slug', 'content', 'created_at')
                 ->length('name', 3, 250)
                 ->length('slug', 6, 250)
                 ->length('content', 10)
+                ->datetime('created_at')
                 ->slug('slug');
     }
 }

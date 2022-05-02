@@ -8,6 +8,7 @@ use Framework\Session\PHPSession;
 use Framework\Session\SessionInterface;
 use Framework\Twig\DebugExtension;
 use Framework\Twig\FlashServiceExtension;
+use Framework\Twig\FormExtension;
 use Framework\Twig\PagerFantaExtension;
 use Framework\Twig\TextExtension;
 use Framework\Twig\TimeExtension;
@@ -29,6 +30,7 @@ return [
         get(TimeExtension::class),
         get(DebugExtension::class),
         get(FlashServiceExtension::class),
+        get(FormExtension::class),
         get(PagerFantaExtension::class)
     ],
     SessionInterface::class => get(PHPSession::class),
