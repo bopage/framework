@@ -16,7 +16,7 @@ class FlashService
     }
     
     /**
-     * Sauvegarde les valeurs
+     * Sauvegarde les valeurs avec la clé success
      *
      * @param  string $message
      * @return void
@@ -29,7 +29,7 @@ class FlashService
     }
 
      /**
-     * Sauvegarde les valeurs
+     * Sauvegarde les valeurs avec la clé error
      *
      * @param  string $message
      * @return void

@@ -41,7 +41,7 @@ class PostTable
      * Récupère un article
      *
      * @param  int $id
-     * @return stdClass
+     * @return Post
      */
     public function find(int $id): ?Post
     {

@@ -11,7 +11,7 @@ class DebugExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('debug', [$this, 'debug'])
+            new TwigFunction('dump', [$this, 'debug'])
         ];
     }
 
