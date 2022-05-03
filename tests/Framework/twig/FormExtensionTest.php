@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class FormExtensionTest extends TestCase
 {
 
-    
+
     /**
      * formExtension
      *
@@ -42,7 +42,7 @@ class FormExtensionTest extends TestCase
             <input type='text' class='form-control is-invalid' name='name' id='name' value='Demo'>
             <div class='invalid-feedback'>erreur</div></div>", $html);
     }
-    
+
     public function testField()
     {
         $html = $this->formExtension->field([], 'name', 'Demo', 'Titre');
@@ -73,6 +73,23 @@ class FormExtensionTest extends TestCase
         $this->assertSimilar("<div class='mb-3'>
             <label for='name' class='form-label'>Titre</label>
             <input type='text' class='form-control demo' name='name' id='name' value='Demo'>
+            </div>", $html);
+    }
+
+    public function testSelect()
+    {
+        $html = $this->formExtension->field(
+            [],
+            'name',
+            2,
+            'Titre',
+            ['options' => ['1' => 'demo1', '2' => 'demo2']]
+        );
+        $this->assertSimilar("<div class='mb-3'>
+            <label for='name' class='form-label'>Titre</label>
+            <select class='form-control' name='name' id='name'>
+            <option value='1'>demo1</option><option value='2' selected>demo2</option>
+            </select>
             </div>", $html);
     }
 }

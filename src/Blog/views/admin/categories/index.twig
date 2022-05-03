@@ -3,11 +3,11 @@
 
 {% block body %}
 
-	<h1>Administration</h1>
+	<h1>Administration des categories</h1>
 
 	<p class="text-right">
 
-		<a href={{ path('blog.admin.new')}} class="btn btn-primary">Nouveau</a>
+		<a href={{ path( routePrefix ~ '.new')}} class="btn btn-primary">Nouveau</a>
 
 	</p>
 
@@ -28,9 +28,9 @@
 					</td>
 					<td>
 						<button type="submit" class="btn btn-sm btn-outline-primary">
-							<a href={{ path('blog.admin.edit', {id: item.id} )}}>Editer</a>
+							<a href={{ path(routePrefix ~ '.edit', {id: item.id} )}}>Editer</a>
 						</button>
-						<form style="display:inline;" action="{{path('blog.admin.delete', {id: item.id})}}" method='post' onsubmit="return confirm('êtes vous sûr ?')">
+						<form style="display:inline;" action="{{ path(routePrefix ~ '.delete', {id: item.id})}}" method='post' onsubmit="return confirm('êtes vous sûr ?')">
 
 
 							<input type="hidden" name="__method" value="DELETE">
@@ -45,6 +45,6 @@
 	</table>
 
 
-	{{ paginate(items, 'blog.admin.index',)}}
+	{{ paginate(items, routePrefix ~ '.index',)}}
 
 {% endblock %}

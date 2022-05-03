@@ -1,0 +1,54 @@
+{% extends '@admin/layout.twig' %}
+
+
+{% block body %}
+
+	<h1>Administration</h1>
+
+	<p class="text-right">
+
+		<a href={{ path( routePrefix ~ '.new')}} class="btn btn-primary">Nouveau</a>
+
+	</p>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Titre</th>
+				<th scope="col">Categorie</th>
+				<th scope="col">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in items %}
+				<tr>
+					<th scope="row">{{ item.id}}</th>
+					<td>
+						{{item.name}}
+					</td>
+					<td>
+						{{item.category_name}}
+					</td>
+					<td>
+						<button type="submit" class="btn btn-sm btn-outline-primary">
+							<a href={{ path(routePrefix ~ '.edit', {id: item.id} )}}>Editer</a>
+						</button>
+						<form style="display:inline;" action="{{ path(routePrefix ~ '.delete', {id: item.id})}}" method='post' onsubmit="return confirm('êtes vous sûr ?')">
+
+
+							<input type="hidden" name="__method" value="DELETE">
+
+							<button type="submit" class="btn btn-sm btn-outline-danger">supprimer</button>
+
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+
+	{{ paginate(items, routePrefix ~ '.index',)}}
+
+{% endblock %}

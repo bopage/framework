@@ -1,14 +1,14 @@
 {% extends '@admin/layout.twig' %}
 
-{% block title 'Edition de l\'article'%}
+{% block title 'Edition d\'une categorie'%}
 
 {% block body %}
 
 <h1>{{item.name}}</h1>
 
-<form action="{{path('blog.admin.edit', {id: item.id})}}"  method='post'>
+<form action="{{path( routePrefix ~ '.edit', {id: item.id})}}"  method='post'>
 
-{% include "@blog/admin/form.twig" %}
+{% include viewPath ~ "/form.twig" %}
 
  <button type="submit" class="btn btn-sm btn-outline-secondary">Editer</button>
 

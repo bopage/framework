@@ -12,27 +12,17 @@ use Symfony\Component\Console\Output\NullOutput;
 class DatabaseTest extends TestCase
 {
 
-    
-    /**
-     * pdo
-     *
-     * @var PDO
-     */
-    protected $pdo;
-    
-    /**
-     * manager
-     *
-     * @var Manager
-     */
-    private $manager;
 
-    protected function setUp(): void
+    public function getPDO()
     {
-        $pdo = new PDO('sqlite::memory:', null, null, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        return new PDO('sqlite::memory:', null, null, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ
         ]);
+    }
 
+    public function getManager(PDO $pdo)
+    {
         $configArray = require 'phinx.php';
         $configArray['environments']['test'] = [
             'adapter' => 'sqlite',
@@ -40,17 +30,21 @@ class DatabaseTest extends TestCase
         ];
 
         $config = new Config($configArray);
-        $manager = new Manager($config, new StringInput(' '), new NullOutput);
-        $manager->migrate('test');
-        $this->manager = $manager;
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-        $this->pdo = $pdo;
+        return new Manager($config, new StringInput(' '), new NullOutput);
     }
 
-    public function seedDatabase()
+    public function migrateDatabase(PDO $pdo)
     {
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
-        $this->manager->seed('test');
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+        $this->getManager($pdo)->migrate('test');
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    }
+
+    public function seedDatabase(PDO $pdo)
+    {
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+        $this->getManager($pdo)->migrate('test');
+        $this->getManager($pdo)->seed('test');
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     }
 }

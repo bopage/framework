@@ -18,10 +18,10 @@ class PaginatedQuery implements AdapterInterface
      * @param  PDO $pdo
      * @param  string $query Requête permettant de récupér X résultats
      * @param  string $queryCount Requête permettane de compter tous les enregistrements
-     * @param  string $entity Object de récupération des données
+     * @param  string|null $entity Object de récupération des données
      * @return void
      */
-    public function __construct(PDO $pdo, string $query, string $queryCount, string $entity)
+    public function __construct(PDO $pdo, string $query, string $queryCount, ?string $entity)
     {
         $this->pdo = $pdo;
         $this->query = $query;
@@ -40,7 +40,9 @@ class PaginatedQuery implements AdapterInterface
         $prepare->bindParam('offset', $offset, PDO::PARAM_INT);
         $prepare->bindParam('length', $length, PDO::PARAM_INT);
         $prepare->execute();
-        $prepare->setFetchMode(PDO::FETCH_CLASS, $this->entity);
+        if ($this->entity) {
+            $prepare->setFetchMode(PDO::FETCH_CLASS, $this->entity);
+        }
         return $prepare->fetchAll();
     }
 }

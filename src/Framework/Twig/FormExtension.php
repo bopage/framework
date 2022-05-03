@@ -17,7 +17,7 @@ class FormExtension extends AbstractExtension
             ])
         ];
     }
-    
+
     /**
      * Génère le code html d'un champ
      *
@@ -43,6 +43,8 @@ class FormExtension extends AbstractExtension
         }
         if ($type === 'textarea') {
             $input = $this->textarea($value, $attributes);
+        } elseif (array_key_exists('options', $option)) {
+            $input = $this->select($value, $option['options'], $attributes);
         } else {
             $input = $this->input($value, $attributes);
         }
@@ -51,7 +53,7 @@ class FormExtension extends AbstractExtension
             {$input}
             {$error}</div>";
     }
-    
+
     /**
      * Génère l'html en fonction des erreurs du contexte
      *
@@ -80,7 +82,7 @@ class FormExtension extends AbstractExtension
     {
         return "<textarea type='text' " . $this->getHtmlFromArray($attributes) . " rows='5'>{$value}</textarea>";
     }
-    
+
     /**
      * Génère l'<input>
      *
@@ -94,15 +96,41 @@ class FormExtension extends AbstractExtension
     }
 
     /**
+     * Génère <select>
+     *
+     * @param  string|null $value
+     * @param  array $option
+     * @param  array $attributes
+     * @return string
+     */
+    private function select(?string $value = null, array $options, array $attributes): string
+    {
+        $htmlOption = array_reduce(array_keys($options), function (string $html, string $key) use ($value, $options) {
+            $params = ['value' => $key, 'selected' => $key === $value];
+            return $html . '<option ' . $this->getHtmlFromArray($params) . '>' . $options[$key] . '</option>';
+        }, "");
+
+        return "<select " . $this->getHtmlFromArray($attributes) . ">
+            $htmlOption
+            </select>";
+    }
+
+    /**
      * Génère les attributs
      *
      * @param string[] $attributes
      */
-    private function getHtmlFromArray(array $attributes)
+    private function getHtmlFromArray(array $attributes): string
     {
-        return implode(' ', array_map(function ($key, $value) {
-            return "$key='$value'";
-        }, array_keys($attributes), $attributes));
+        $htmlPart = [];
+        foreach ($attributes as $key => $value) {
+            if ($value === true) {
+                $htmlPart[] = (string)$key;
+            } elseif ($value !== false) {
+                $htmlPart[] = "$key='$value'";
+            }
+        }
+        return implode(' ', $htmlPart);
     }
 
     private function convertValue($value)

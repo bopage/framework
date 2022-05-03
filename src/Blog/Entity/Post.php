@@ -14,6 +14,8 @@ class Post
 
     public $content;
 
+    public $category_name;
+
     public $created_at;
 
     public $updated_at;

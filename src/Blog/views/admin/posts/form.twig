@@ -1,4 +1,5 @@
 {{ field('name', item.name, 'Titre de l\'article')}}
 {{ field('slug', item.slug, 'Lien')}}
+{{ field('category_id', item.category_id, 'Categorie', {options: categories})}}
 {{ field('content', item.content, 'Contenu', {type: 'textarea'})}}
 {{ field('created_at', item.created_at, 'Date', {class: 'datepicker'})}}

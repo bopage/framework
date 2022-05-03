@@ -2,7 +2,9 @@
 namespace Framework;
 
 use DateTime;
+use Framework\Database\Table;
 use Framework\Validator\ValidatorErrors;
+use PDO;
 
 class Validator
 {
@@ -109,6 +111,17 @@ class Validator
         $errors = DateTime::getLastErrors();
         if ($errors['error_count'] > 0 ||  $errors['warning_count'] || $date === false) {
             $this->addError($key, 'datetime', [$format]);
+        }
+        return $this;
+    }
+
+    public function exist(string $key, string $table, PDO $pdo):self
+    {
+        $value = $this->getValue($key);
+        $statement = $pdo->prepare("SELECT id FROM {$table} WHERE id = ?");
+        $statement->execute([$value]);
+        if ($statement->fetchColumn() === false) {
+            $this->addError($key, 'exist', [$table]);
         }
         return $this;
     }

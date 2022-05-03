@@ -6,9 +6,9 @@
 
 <h1>Ajouter un article</h1>
 
-<form action="{{path('blog.admin.new')}}"  method='post'>
+<form action="{{path(routePrefix ~ '.new')}}"  method='post'>
 
-{% include "@blog/admin/form.twig" %}
+{% include viewPath ~ "/form.twig" %}
 
  <button type="submit" class="btn btn-sm btn-outline-secondary">Ajouter</button>
 
