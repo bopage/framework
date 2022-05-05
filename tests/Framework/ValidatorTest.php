@@ -138,6 +138,7 @@ class ValidatorTest extends DatabaseTest
         $this->assertTrue($this->makeValidator(['category' => '1'])->exist('category', 'test', $pdo)->isValid());
         $this->assertFalse($this->makeValidator(['category' => '12'])->exist('category', 'test', $pdo)->isValid());
     }
+    
 
     public function testUnique()
     {

@@ -125,6 +125,17 @@ class Table
     {
         return $this->fecthOrFail("SELECT * FROM {$this->table} WHERE id= ?", [$id]);
     }
+    
+    /**
+     * Compte le nombre d'enregistrement
+     *
+     * @return mixed
+     */
+    public function count()
+    {
+        return $this->fecthColumn("SELECT COUNT(id) FROM {$this->table}");
+    }
+
 
     /**
      * Persiste les enregistrement en base de donnée
@@ -243,5 +254,22 @@ class Table
             throw new NoRecordException();
         }
         return $record;
+    }
+    
+    /**
+     * Récupère la première colonne
+     *
+     * @param  string $query
+     * @param  array $param
+     * @return void
+     */
+    protected function fecthColumn(string $query, ?array $param = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($param);
+        if ($this->entity) {
+            $query->setFetchMode(PDO::FETCH_CLASS, $this->entity);
+        }
+         return $query->fetchColumn();
     }
 }

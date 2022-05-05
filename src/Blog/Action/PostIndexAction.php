@@ -17,7 +17,6 @@ class PostIndexAction
      */
     private $renderer;
 
-    private $pdo;
 
     private $postTable;
 

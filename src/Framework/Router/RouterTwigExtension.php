@@ -34,12 +34,20 @@ class RouterTwigExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('path', [$this, 'pathFor'])
+            new TwigFunction('path', [$this, 'pathFor']),
+            new TwigFunction('is_subPath', [$this, 'isSubPath'])
         ];
     }
 
     public function pathFor(string $name, array $params = []): string
     {
         return $this->router->generateUri($name, $params);
+    }
+
+    public function isSubPath(string $path): bool
+    {
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $expectedUri = $this->router->generateUri($path);
+        return strpos($uri, $expectedUri) !== false;
     }
 }

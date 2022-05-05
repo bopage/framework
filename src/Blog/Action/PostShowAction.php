@@ -22,11 +22,14 @@ class PostShowAction
 
     private $postTable;
 
+    private $router;
+
     use RouterAwareAction;
 
-    public function __construct(RendererInterface $renderer, PostTable $postTable)
+    public function __construct(RendererInterface $renderer, Router $router, PostTable $postTable)
     {
         $this->renderer = $renderer;
+        $this->router = $router;
         $this->postTable = $postTable;
     }
 
