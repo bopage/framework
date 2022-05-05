@@ -24,7 +24,7 @@ class CrudAction
 
     private $router;
 
-    private $Table;
+    protected $Table;
 
     private $flashService;
 
@@ -205,9 +205,9 @@ class CrudAction
     }
 
     /**
-     * Permet de traiter les paramètre à la vue
+     * Permet de traiter les paramètre à envoyer la vue
      *
-     * @param  mixed $params
+     * @param  array $params
      * @return array
      */
     protected function fromParams(array $params): array

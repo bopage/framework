@@ -23,15 +23,28 @@ class PagerFantaExtension extends AbstractExtension
             new TwigFunction('paginate', [$this, 'paginate'], ['is_safe' => ['html']])
         ];
     }
-
-    public function paginate(Pagerfanta $pagintedResult, string $route, array $queryAgrs = []): string
-    {
+    
+    /**
+     * Génère la pagination
+     *
+     * @param  Pagerfanta $pagintedResult
+     * @param  string $route
+     * @param  array $routeParams
+     * @param  array $queryAgrs
+     * @return string
+     */
+    public function paginate(
+        Pagerfanta $pagintedResult,
+        string $route,
+        array $routeParams = [],
+        array $queryAgrs = []
+    ): string {
         $view = new TwitterBootstrap5View();
-        return $view->render($pagintedResult, function (int $page) use ($route, $queryAgrs) {
+        return $view->render($pagintedResult, function (int $page) use ($route, $routeParams, $queryAgrs) {
             if ($page > 1) {
                 $queryAgrs['p'] = $page;
             }
-            return $this->router->generateUri($route, [], $queryAgrs);
+            return $this->router->generateUri($route, $routeParams, $queryAgrs);
         });
     }
 }

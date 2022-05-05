@@ -1,4 +1,5 @@
 <?php
+
 namespace Framework;
 
 use DateTime;
@@ -16,7 +17,7 @@ class Validator
     {
         $this->params = $params;
     }
-    
+
     /**
      * Definit les champs obligatoires
      *
@@ -34,7 +35,7 @@ class Validator
 
         return $this;
     }
-    
+
     /**
      * Vérifie que le champ n'est pas vied
      *
@@ -53,7 +54,7 @@ class Validator
         return $this;
     }
 
-    
+
     /**
      * Vérifie la taille de la valeur de la clé
      *
@@ -80,7 +81,7 @@ class Validator
 
         return $this;
     }
-    
+
     /**
      * Vérifie que le slug est valide
      *
@@ -96,7 +97,7 @@ class Validator
         }
         return $this;
     }
-    
+
     /**
      * Vérifie que la date est un datetime valide
      *
@@ -115,7 +116,7 @@ class Validator
         return $this;
     }
 
-    public function exist(string $key, string $table, PDO $pdo):self
+    public function exist(string $key, string $table, PDO $pdo): self
     {
         $value = $this->getValue($key);
         $statement = $pdo->prepare("SELECT id FROM {$table} WHERE id = ?");
@@ -125,7 +126,33 @@ class Validator
         }
         return $this;
     }
-    
+
+    /**
+     * Vérifie qu'une clée est uniqeue
+     *
+     * @param  string $key
+     * @param  string $table
+     * @param  PDO $pdo
+     * @param  int|null $exclude
+     * @return self
+     */
+    public function unique(string $key, string $table, PDO $pdo, ?int $exclude = null): self
+    {
+        $value = $this->getValue($key);
+        $query = "SELECT id FROM {$table} WHERE $key = ?";
+        $params = [$value];
+        if ($exclude !== null) {
+            $query .= " AND id != ?";
+            $params[] = $exclude;
+        }
+        $statement = $pdo->prepare($query);
+        $statement->execute($params);
+        if ($statement->fetchColumn() !== false) {
+            $this->addError($key, 'unique', [$value]);
+        }
+        return $this;
+    }
+
     /**
      * Renvoie les erreurs
      *
@@ -135,7 +162,7 @@ class Validator
     {
         return $this->errors;
     }
-    
+
     /**
      * Vérifie s'il n'y a pas d'erreurs
      *
@@ -145,7 +172,7 @@ class Validator
     {
         return empty($this->errors);
     }
-    
+
     /**
      * Ajoute une Erreur
      *
@@ -157,7 +184,7 @@ class Validator
     {
         $this->errors[$key] = new ValidatorErrors($key, $rule, $attributes);
     }
-    
+
     /**
      * Renvoid la clé ou null
      *

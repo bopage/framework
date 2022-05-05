@@ -18,7 +18,8 @@ class ValidatorErrors
         'maxLength' => "Le champ %s doit contenir mois de %d caractères",
         'betweenLength' => "Le champ %s doit contenir entre %d et %d carctères",
         'datetime' => "Le champ %s doit être un datetime valide (%d)",
-        'exist' => "La categorie %s n'existe pas dans la table %s"
+        'exist' => "La categorie %s n'existe pas dans la table %s",
+        'unique' => "La champ %s doit être unique"
     ];
 
     public function __construct(string $key, string $rule, array $attributes = [])

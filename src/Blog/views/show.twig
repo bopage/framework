@@ -3,16 +3,20 @@
 {% block title post.name %}
 
 {% block body %}
-<h1>{{ post.name}}</h1>
 
-<p>
+	<div class='container'>
+		<h1>{{ post.name}}</h1>
+		{% if post.category_name %}
+			<a href="{{ path('blog.category', {slug: post.category_slug})}}" titre="{{post.category_name}}">{{post.category_name}}</a>
+		{% endif %}
 
-{{ post.created_at | ago }}
+		<p>
+			{{ post.created_at | ago }}
+		</p>
 
-</p>
-
-<p>
-{{post.content | nl2br }}
-</p>
+		<p>
+			{{post.content | nl2br }}
+		</p>
+	</div>
 
 {% endblock %}

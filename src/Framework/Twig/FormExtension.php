@@ -138,6 +138,6 @@ class FormExtension extends AbstractExtension
         if ($value instanceof DateTime) {
             return $value->format('Y-m-d H:i:s');
         }
-        return (string)$value;
+        return htmlentities($value);
     }
 }

@@ -3,7 +3,6 @@
 namespace Framework\Database;
 
 use Framework\Database\PaginatedQuery;
-use Mezzio\Router\FastRouteRouter;
 use Pagerfanta\Pagerfanta;
 use PDO;
 
@@ -65,17 +64,17 @@ class Table
     {
         return "SELECT * FROM {$this->table}";
     }
-    
+
     /**
      * Récupère une liste clef valeur de nos enregistrement
      *
      * @return array
      */
-    public function findList():array
+    public function findList(): array
     {
         $results = $this->pdo
-                ->query("SELECT id, name FROM {$this->table}")
-                ->fetchAll(PDO::FETCH_NUM);
+            ->query("SELECT id, name FROM {$this->table}")
+            ->fetchAll(PDO::FETCH_NUM);
         $list = [];
         foreach ($results as $result) {
             $list[$result[0]] = $result[1];
@@ -84,20 +83,47 @@ class Table
         return $list;
     }
 
+
+    /**
+     * Récupère tous les engistrements
+     *
+     * @return array
+     */
+    public function findAll(): array
+    {
+        $statement = $this->pdo->query("SELECT * FROM {$this->table}");
+        if ($this->entity) {
+            $statement->setFetchMode(PDO::FETCH_CLASS, $this->entity);
+        } else {
+            $statement->setFetchMode(PDO::FETCH_OBJ);
+        }
+
+        return $statement->fetchAll();
+    }
+    
+    /**
+     * Récupère une ligne par rapport à un champ
+     *
+     * @param  string $field
+     * @param  string $value
+     * @return object
+     * @throws NoRecordException
+     */
+    public function findBy(string $field, string $value): object
+    {
+        return $this->fecthOrFail("SELECT * FROM {$this->table} WHERE $field = ?", [$value]);
+    }
+
     /**
      * Récupère un élément
      *
      * @param  int $id
      * @return mixed
+     * @throws NoRecordException
      */
     public function find(int $id)
     {
-        $query = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE id= ?");
-        $query->execute([$id]);
-        if ($this->entity) {
-            $query->setFetchMode(PDO::FETCH_CLASS, $this->entity);
-        }
-        return $query->fetch() ?: null;
+        return $this->fecthOrFail("SELECT * FROM {$this->table} WHERE id= ?", [$id]);
     }
 
     /**
@@ -172,7 +198,7 @@ class Table
     {
         return $this->entity;
     }
-    
+
     /**
      * Vérifie qu'un enregistrement exist
      *
@@ -186,6 +212,7 @@ class Table
         return $statement->fetchColumn() !== false;
     }
 
+
     /**
      * Get pdo
      *
@@ -194,5 +221,27 @@ class Table
     public function getPdo(): PDO
     {
         return $this->pdo;
+    }
+    
+    /**
+     * Permet d'exécuter une requête et de récupérer une ligne dans un champ
+     *
+     * @param  string $query
+     * @param  array|null $param
+     * @return mixed
+     */
+    protected function fecthOrFail(string $query, ?array $param = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($param);
+        if ($this->entity) {
+            $query->setFetchMode(PDO::FETCH_CLASS, $this->entity);
+        }
+        $record = $query->fetch();
+
+        if ($record === false) {
+            throw new NoRecordException();
+        }
+        return $record;
     }
 }
