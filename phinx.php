@@ -1,10 +1,18 @@
 <?php
 
+use App\Admin\AdminModule;
+use App\Blog\BlogModule;
+
 require 'public/index.php';
 
 $migrations = [];
 
 $seeds = [];
+
+$modules = [
+    AdminModule::class,
+    BlogModule::class
+];
 
 foreach ($modules as $module) {
     if ($module::MIGRATIONS) {

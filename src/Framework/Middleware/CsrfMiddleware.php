@@ -21,13 +21,13 @@ class CsrfMiddleware implements MiddlewareInterface
     private $session;
 
     public function __construct(
-        &$session,
+        $session,
         int $limit = 50,
         string $formKey = '_csrf',
         string $sessionKey = 'csrf'
     ) {
         $this->validSession($session);
-        $this->session = &$session;
+        $this->session = $session;
         $this->limit = $limit;
         $this->formKey = $formKey;
         $this->sessionKey = $sessionKey;
@@ -88,7 +88,7 @@ class CsrfMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Permet de limitet les tokens
+     * Permet de limiter les tokens
      *
      * @return void
      */

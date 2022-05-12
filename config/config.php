@@ -4,6 +4,7 @@ use Framework\Middleware\CsrfMiddleware;
 use Framework\Renderer\RendererInterface;
 use Framework\Renderer\TwigRendererFactory;
 use Framework\Router;
+use Framework\Router\RouterFactory;
 use Framework\Router\RouterTwigExtension;
 use Framework\Session\PHPSession;
 use Framework\Session\SessionInterface;
@@ -21,6 +22,7 @@ use function DI\factory;
 use function DI\get;
 
 return [
+    'env' => env('ENV', 'dev'),
     'database.host' => 'localhost',
     'database.name' => 'monsupersite',
     'database.username' => 'root',
@@ -38,7 +40,7 @@ return [
     ],
     SessionInterface::class => get(PHPSession::class),
     CsrfMiddleware::class => create()->constructor(get(SessionInterface::class)),
-    Router::class => create(),
+    Router::class => factory(RouterFactory::class),
     RendererInterface::class => factory(TwigRendererFactory::class),
     PDO::class => function (ContainerInterface $c) {
         return  new PDO(

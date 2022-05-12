@@ -27,7 +27,7 @@ class App implements RequestHandlerInterface
      * @var ContainerInterface
      */
     private $container;
-    
+
     /**
      * Le dossier de configuration
      *
@@ -43,7 +43,7 @@ class App implements RequestHandlerInterface
     {
         $this->definition = $definition;
     }
-    
+
     /**
      * RAjoute les différents modules, un module est une fonctionalité
      *
@@ -56,7 +56,7 @@ class App implements RequestHandlerInterface
 
         return $this;
     }
-    
+
     /**
      * Rajoute les différents middlewares, un middleware est un comportement au niveau de la requête
      *
@@ -91,8 +91,14 @@ class App implements RequestHandlerInterface
 
     public function getContainer(): ContainerInterface
     {
+        $env = null;
         if ($this->container === null) {
             $builder = new ContainerBuilder();
+           // $env = getenv('env') ?: 'production';
+            if ($env === 'production') {
+                $builder->enableCompilation('tmp');
+                $builder->writeProxiesToFile(true, 'tmp/proxies');
+            }
             $builder->addDefinitions($this->definition);
             foreach ($this->modules as $module) {
                 if ($module::DEFINITIONS) {
