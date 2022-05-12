@@ -16,6 +16,8 @@ class Post
 
     public $category_name;
 
+    public $category_slug;
+
     public $created_at;
 
     public $updated_at;

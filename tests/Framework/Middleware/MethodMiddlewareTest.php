@@ -10,7 +10,7 @@ use Whoops\Handler\HandlerInterface;
 class MethodMiddlewareTest extends TestCase
 {
 
-    
+
     /**
      * middleware
      *
@@ -26,15 +26,15 @@ class MethodMiddlewareTest extends TestCase
     public function testAddMethod()
     {
         $handle = $this->getMockBuilder(HandlerInterface::class)
-                ->addMethods(['process'])
-                ->getMock();
+            ->onlyMethods(['handle'])
+            ->getMock();
         $handle->expects($this->once())
-                ->method('process')
-                ->with($this->callback(function ($request) {
-                    return $request->getMethod() === 'DELETE';
-                }));
+            ->method('handle')
+            ->with($this->callback(function ($request) {
+                return $request->getMethod() === 'DELETE';
+            }));
         $request = (new ServerRequest('POST', '/demo'))
-                ->withParsedBody(['_method' => 'DELETE']);
+            ->withParsedBody(['_method' => 'DELETE']);
         $this->middleware->process($request, $handle);
     }
 }

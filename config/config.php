@@ -1,11 +1,13 @@
 <?php
 
+use Framework\Middleware\CsrfMiddleware;
 use Framework\Renderer\RendererInterface;
 use Framework\Renderer\TwigRendererFactory;
 use Framework\Router;
 use Framework\Router\RouterTwigExtension;
 use Framework\Session\PHPSession;
 use Framework\Session\SessionInterface;
+use Framework\Twig\CsrfExtension;
 use Framework\Twig\DebugExtension;
 use Framework\Twig\FlashServiceExtension;
 use Framework\Twig\FormExtension;
@@ -31,9 +33,11 @@ return [
         get(DebugExtension::class),
         get(FlashServiceExtension::class),
         get(FormExtension::class),
+        get(CsrfExtension::class),
         get(PagerFantaExtension::class)
     ],
     SessionInterface::class => get(PHPSession::class),
+    CsrfMiddleware::class => create()->constructor(get(SessionInterface::class)),
     Router::class => create(),
     RendererInterface::class => factory(TwigRendererFactory::class),
     PDO::class => function (ContainerInterface $c) {

@@ -5,6 +5,7 @@ use App\Blog\BlogModule;
 use Framework\Middleware\DispatcherMiddleware;
 use Framework\Middleware\NotFoundMiddleware;
 use Framework\App;
+use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\MethodMiddleware;
 use Framework\Middleware\RouterMiddleware;
 use Framework\Middleware\TrailingSlashMiddleware;
@@ -25,6 +26,7 @@ $app = (new App(dirname(__DIR__) . '/config/config.php'))
             ->addModule(BlogModule::class)
             ->pipe(TrailingSlashMiddleware::class)
             ->pipe(MethodMiddleware::class)
+            ->pipe(CsrfMiddleware::class)
             ->pipe(RouterMiddleware::class)
             ->pipe(DispatcherMiddleware::class)
             ->pipe(NotFoundMiddleware::class);

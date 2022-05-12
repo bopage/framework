@@ -50,7 +50,7 @@
 								<div class="card-body">
 									{% if post.category_name %}
 										<p>
-											{{ post.category_name }}
+											<a href={{ path('blog.category', {slug: post.category_slug} ) }}>{{ post.category_name }}</a>
 										</p>
 									{% endif %}
 									<p class="card-text">
