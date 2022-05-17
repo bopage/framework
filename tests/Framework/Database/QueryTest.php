@@ -54,4 +54,32 @@ class QueryTest extends DatabaseTest
             ->count();
         $this->assertEquals(29, $posts);
     }
+
+    public function testHydrateEntity()
+    {
+        $pdo = $this->getPDO();
+        $this->migrateDatabase($pdo);
+        $this->seedDatabase($pdo);
+
+        $posts = (new Query($pdo))
+            ->from('posts as p')
+            ->into(Demo::class)
+            ->all();
+        $this->assertEquals('demo', substr($posts[0]->getSlug(), '-4'));
+    }
+
+    public function testLazyHydrate()
+    {
+        $pdo = $this->getPDO();
+        $this->migrateDatabase($pdo);
+        $this->seedDatabase($pdo);
+
+        $posts = (new Query($pdo))
+            ->from('posts as p')
+            ->into(Demo::class)
+            ->all();
+        $post = $posts[0];
+        $posts2 = $posts[0];
+        $this->assertSame($post, $posts2);
+    }
 }

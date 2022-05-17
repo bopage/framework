@@ -16,6 +16,11 @@ class Query
 
     private $params;
 
+    private $entity;
+
+    private $records;
+
+
     public function __construct(?PDO $pdo = null)
     {
         $this->pdo = $pdo;
@@ -50,11 +55,26 @@ class Query
         return $this;
     }
 
-    public function where(string ...$conditions):self
+    public function where(string ...$conditions): self
     {
         $this->where = array_merge($this->where, $conditions);
         return $this;
     }
+
+    public function into(string $entity): self
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    public function all(): QueryResult
+    {
+            return new QueryResult(
+                $this->execute()->fetchAll(PDO::FETCH_ASSOC),
+                $this->entity
+            );
+    }
+
 
     public function __toString()
     {
