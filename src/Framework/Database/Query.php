@@ -18,8 +18,6 @@ class Query
 
     private $entity;
 
-    private $records;
-
 
     public function __construct(?PDO $pdo = null)
     {

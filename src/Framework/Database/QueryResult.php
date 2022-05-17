@@ -70,11 +70,11 @@ class QueryResult implements ArrayAccess, Iterator
 
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        throw new Exception('can\'t changer records');
+        throw new Exception('can\'t change records');
     }
 
     public function offsetUnset(mixed $offset): void
     {
-        throw new Exception('can\'t changer records');
+        throw new Exception('can\'t change records');
     }
 }

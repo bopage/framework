@@ -19,7 +19,9 @@ class ValidatorErrors
         'betweenLength' => "Le champ %s doit contenir entre %d et %d carctères",
         'datetime' => "Le champ %s doit être un datetime valide (%d)",
         'exist' => "La categorie %s n'existe pas dans la table %s",
-        'unique' => "La champ %s doit être unique"
+        'unique' => "La champ %s doit être unique",
+        'filetype' => "Le champ %s n'est pas au format valide (%s)",
+        'uploaded' => 'Vous devez uploader un fichier'
     ];
 
     public function __construct(string $key, string $rule, array $attributes = [])

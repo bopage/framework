@@ -3,6 +3,7 @@
 namespace App\Blog\Action;
 
 use App\Blog\Entity\Post;
+use App\Blog\PostUpload;
 use App\Blog\Table\CategoryTable;
 use App\Blog\Table\PostTable;
 use DateTime;
@@ -22,15 +23,19 @@ class PostCrudAction extends CrudAction
 
     private $categoryTable;
 
+    private $postUpload;
+
     public function __construct(
         RendererInterface $renderer,
         Router $router,
         PostTable $table,
         FlashService $flashService,
-        CategoryTable $categoryTable
+        CategoryTable $categoryTable,
+        PostUpload $postUpload
     ) {
         parent::__construct($renderer, $router, $table, $flashService);
         $this->categoryTable = $categoryTable;
+        $this->postUpload = $postUpload;
     }
 
     protected function getNewEntity()
@@ -48,10 +53,14 @@ class PostCrudAction extends CrudAction
          return $params;
     }
 
-    protected function getParams(ServerRequestInterface $request): array
+    protected function getParams(ServerRequestInterface $request, $post): array
     {
-        $params =  array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, ['name', 'slug', 'content', 'created_at', 'category_id']);
+        $params = array_merge($request->getParsedBody(), $request->getUploadedFiles());
+        //uploader le fichier
+        $params['image'] = $this->postUpload->upload($params['image'], $post->image);
+
+        $params =  array_filter($params, function ($key) {
+            return in_array($key, ['name', 'slug', 'content', 'created_at', 'category_id', 'image']);
         }, ARRAY_FILTER_USE_KEY);
 
         return array_merge($params, [
@@ -61,13 +70,19 @@ class PostCrudAction extends CrudAction
 
     protected function getValidator(ServerRequestInterface $request): Validator
     {
-        return parent::getValidator($request)
+        $validator =  parent::getValidator($request)
             ->required('name', 'slug', 'content', 'created_at', 'category_id')
             ->length('name', 3, 250)
             ->length('slug', 6, 250)
             ->length('content', 10)
             ->datetime('created_at')
             ->exist('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
+            ->extension('image', ['jpg', 'png'])
             ->slug('slug');
+        
+        if (!is_null($request->getAttribute('id'))) {
+            $validator->uploaded('image');
+        }
+        return $validator;
     }
 }

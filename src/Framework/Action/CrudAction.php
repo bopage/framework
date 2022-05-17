@@ -111,14 +111,14 @@ class CrudAction
         $errors = null;
         $item = $this->Table->find($request->getAttribute('id'));
         if ($request->getMethod() === 'POST') {
-            $params = $this->getParams($request);
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
-                $this->Table->update($item->id, $params);
+                $this->Table->update($item->id, $this->getParams($request, $item));
                 $this->flashService->success($this->message['edit']);
                 return $this->redirect($this->routePrefix . '.index');
             }
             $errors = $valid->getErrors();
+            $params = $request->getParsedBody();
             $params['id'] =  $item->id;
             $item = $params;
         }
@@ -139,16 +139,15 @@ class CrudAction
         $errors = [];
         $item = $this->getNewEntity();
         if ($request->getMethod() === 'POST') {
-            $params = $this->getParams($request);
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
-                $this->Table->insert($params);
+                $this->Table->insert($this->getParams($request, $item));
                 $this->flashService->success($this->message['create']);
                 return $this->redirect($this->routePrefix . '.index');
             }
 
             $errors = $valid->getErrors();
-            $item = $params;
+            $item = $request->getParsedBody();
         }
         return $this->renderer->render(
             $this->viewPath . '/new',
@@ -173,10 +172,11 @@ class CrudAction
     /**
      * Renvoie les paramètres filtré
      *
-     * @param  mixed $request
+     * @param  ServerRequestInterface $request
+     * @param   $item Représente une entitée
      * @return array
      */
-    protected function getParams(ServerRequestInterface $request): array
+    protected function getParams(ServerRequestInterface $request, $item): array
     {
         return  array_filter($request->getParsedBody(), function ($key) {
             return in_array($key, []);
@@ -191,7 +191,7 @@ class CrudAction
      */
     protected function getValidator(ServerRequestInterface $request): Validator
     {
-        return new Validator($request->getParsedBody());
+        return new Validator(array_merge($request->getParsedBody(), $request->getUploadedFiles()));
     }
 
     /**

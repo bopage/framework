@@ -3,12 +3,18 @@
 namespace Framework;
 
 use DateTime;
-use Framework\Database\Table;
 use Framework\Validator\ValidatorErrors;
 use PDO;
+use Psr\Http\Message\UploadedFileInterface;
 
 class Validator
 {
+    private const MIME_TYPES = [
+        'jpg' => 'image/jpeg',
+        'png' => 'image/png',
+        'pdf' => 'application/pdf'
+    ];
+
     private $params;
 
     private $errors = [];
@@ -94,6 +100,44 @@ class Validator
         $pattern = '/^[a-z0-9]+(-[a-z0-9]+?)*$/';
         if (!is_null($value) && !preg_match($pattern, $value)) {
             $this->addError($key, 'slug');
+        }
+        return $this;
+    }
+
+    /**
+     * Vérifie que le fichier a bien été uploader
+     *
+     * @param  string $key
+     * @return self
+     */
+    public function uploaded(string $key): self
+    {
+        /** @var UploadedFileInterface */
+        $file = $this->getValue($key);
+        if ($file === null || $file->getError() !== UPLOAD_ERR_OK) {
+            $this->addError($key, 'uploaded');
+        }
+        return $this;
+    }
+
+    /**
+     * Vérifie le format de fichier
+     *
+     * @param  string $key
+     * @param  array $extensions
+     * @return self
+     */
+    public function extension(string $key, array $extensions): self
+    {
+        /** @var UploadedFileInterface */
+        $file = $this->getValue($key);
+        if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
+            $type = $file->getClientMediaType();
+            $extension = mb_strtolower(pathinfo($file->getClientFilename(), PATHINFO_EXTENSION));
+            $expectType = self::MIME_TYPES[$extension] ?? null;
+            if (!in_array($extension, $extensions) || $expectType !== $type) {
+                $this->addError($key, 'filetype', [join(',', $extensions)]);
+            }
         }
         return $this;
     }
@@ -189,9 +233,8 @@ class Validator
      * Renvoid la clé ou null
      *
      * @param  string $key
-     * @return string|null
      */
-    private function getValue(string $key): ?string
+    private function getValue(string $key)
     {
         if (array_key_exists($key, $this->params)) {
             return $this->params[$key];

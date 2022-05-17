@@ -18,18 +18,25 @@ class Post
 
     public $updatedAt;
 
+    public $image;
+
 
     public function setCreatedAt(string $datetime)
     {
-        if ($this->createdAt) {
+        if (is_string($this->createdAt)) {
             $this->createdAt = new DateTime($datetime);
         }
     }
 
     public function setUpdateAt(string $datetime)
     {
-        if ($this->updatedAt) {
+        if (is_string($this->updatedAt)) {
             $this->updatedAt = new DateTime($datetime);
         }
+    }
+
+    public function getThumb()
+    {
+        return '/uploads/posts/' . $this->image;
     }
 }
