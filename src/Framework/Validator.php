@@ -230,7 +230,7 @@ class Validator
     }
 
     /**
-     * Renvoid la clé ou null
+     * Renvoie la clé ou null
      *
      * @param  string $key
      */

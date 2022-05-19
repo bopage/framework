@@ -41,12 +41,12 @@ class QueryTest extends DatabaseTest
         $this->seedDatabase($pdo);
 
         $posts = (new Query($pdo))
-            ->from('posts as p')
+            ->from('posts', 'p')
             ->count();
         $this->assertEquals(100, $posts);
 
         $posts = (new Query($pdo))
-            ->from('posts as p')
+            ->from('posts', 'p')
             ->where('p.id < :number')
             ->params([
                 'number' => 30
@@ -64,7 +64,7 @@ class QueryTest extends DatabaseTest
         $posts = (new Query($pdo))
             ->from('posts as p')
             ->into(Demo::class)
-            ->all();
+            ->fetchAll();
         $this->assertEquals('demo', substr($posts[0]->getSlug(), '-4'));
     }
 
@@ -77,9 +77,37 @@ class QueryTest extends DatabaseTest
         $posts = (new Query($pdo))
             ->from('posts as p')
             ->into(Demo::class)
-            ->all();
+            ->fetchAll();
         $post = $posts[0];
         $posts2 = $posts[0];
         $this->assertSame($post, $posts2);
+    }
+
+    public function testLimitOrder()
+    {
+        $query = (new Query())
+            ->from('posts')
+            ->select('name')
+            ->order('id DESC')
+            ->order('name ASC')
+            ->limit(10, 5);
+        $this->assertEquals(
+            'SELECT name FROM posts ORDER BY id DESC, name ASC LIMIT 5, 10',
+            (string)($query)
+        );
+    }
+
+    public function testJoinQuery()
+    {
+        $query = (new Query())
+            ->from('posts')
+            ->select('name')
+            ->join('categories as c', 'c.id = p.category_id')
+            ->join('categories as c2', 'c2.id = p.category_id', 'inner');
+        $this->assertEquals(
+            'SELECT name FROM posts LEFT JOIN categories as c ON c.id = p.category_id' .
+            ' INNER JOIN categories as c2 ON c2.id = p.category_id',
+            (string)($query)
+        );
     }
 }

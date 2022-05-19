@@ -43,7 +43,7 @@ class PostIndexAction
     public function __invoke(ServerRequestInterface $request)
     {
         $params = $request->getQueryParams();
-        $posts = $this->postTable->findPaginetedPublic(12, $params['p'] ?? 1);
+        $posts = $this->postTable->findPublic()->paginate(12, $params['p'] ?? 1);
         $categories = $this->categoryTable->findAll();
         return $this->renderer->render('@blog/index', compact('posts', 'categories'));
     }

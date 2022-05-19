@@ -3,6 +3,7 @@
 namespace Framework\Action;
 
 use Framework\Action\RouterAwareAction;
+use Framework\Database\Hydrator;
 use Framework\Database\Table;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
@@ -96,7 +97,7 @@ class CrudAction
     public function index(ServerRequestInterface $request): string
     {
         $params = $request->getQueryParams();
-        $items = $this->Table->findPagineted(12, $params['p'] ?? 1);
+        $items = $this->Table->findAll()->paginate(12, $params['p'] ?? 1);
         return $this->renderer->render($this->viewPath . '/index', compact('items'));
     }
 
@@ -118,9 +119,7 @@ class CrudAction
                 return $this->redirect($this->routePrefix . '.index');
             }
             $errors = $valid->getErrors();
-            $params = $request->getParsedBody();
-            $params['id'] =  $item->id;
-            $item = $params;
+            Hydrator::hydrate($request->getParsedBody(), $item);
         }
         return $this->renderer->render(
             $this->viewPath . '/edit',
@@ -147,7 +146,7 @@ class CrudAction
             }
 
             $errors = $valid->getErrors();
-            $item = $request->getParsedBody();
+            Hydrator::hydrate($request->getParsedBody(), $item);
         }
         return $this->renderer->render(
             $this->viewPath . '/new',
@@ -186,7 +185,7 @@ class CrudAction
     /**
      * Validation des données
      *
-     * @param  mixed $request
+     * @param  ServerRequestInterface $request
      * @return Validator
      */
     protected function getValidator(ServerRequestInterface $request): Validator
@@ -197,7 +196,6 @@ class CrudAction
     /**
      * Permet de définir une nouvelle entitée
      *
-     * @return void
      */
     protected function getNewEntity()
     {

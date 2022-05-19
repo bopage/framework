@@ -2,9 +2,8 @@
 
 namespace Framework\Database;
 
-use Framework\Database\PaginatedQuery;
-use Pagerfanta\Pagerfanta;
 use PDO;
+use stdClass;
 
 class Table
 {
@@ -26,43 +25,13 @@ class Table
     /**
      * Entitée à utiliser pour rédupérer les données
      *
-     * @var string|null
+     * @var string
      */
-    protected $entity;
+    protected $entity = stdClass::class;
 
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
-    }
-
-
-    /**
-     * Pagine les éléments
-     *
-     * @return Pagerfanta
-     */
-    public function findPagineted(int $perPage, int $currentPage): Pagerfanta
-    {
-        $paginatedQuery =  new PaginatedQuery(
-            $this->pdo,
-            $this->paginationQuery(),
-            "SELECT COUNT(id) FROM {$this->table}",
-            $this->entity
-        );
-
-        return (new Pagerfanta($paginatedQuery))
-            ->setMaxPerPage($perPage)
-            ->setCurrentPage($currentPage);
-    }
-
-    /**
-     * Les élément a paginer
-     *
-     * @return string
-     */
-    protected function paginationQuery()
-    {
-        return "SELECT * FROM {$this->table}";
     }
 
     /**
@@ -83,24 +52,26 @@ class Table
         return $list;
     }
 
+    /**
+     *
+     * @return Query
+     */
+    public function makeQuery(): Query
+    {
+        return (new Query($this->pdo))->from($this->table, $this->table[0])->into($this->entity);
+    }
+
 
     /**
      * Récupère tous les engistrements
      *
-     * @return array
+     * @return Query
      */
-    public function findAll(): array
+    public function findAll(): Query
     {
-        $statement = $this->pdo->query("SELECT * FROM {$this->table}");
-        if ($this->entity) {
-            $statement->setFetchMode(PDO::FETCH_CLASS, $this->entity);
-        } else {
-            $statement->setFetchMode(PDO::FETCH_OBJ);
-        }
-
-        return $statement->fetchAll();
+        return $this->makeQuery();
     }
-    
+
     /**
      * Récupère une ligne par rapport à un champ
      *
@@ -111,7 +82,7 @@ class Table
      */
     public function findBy(string $field, string $value): object
     {
-        return $this->fecthOrFail("SELECT * FROM {$this->table} WHERE $field = ?", [$value]);
+        return $this->makeQuery()->where("$field = :field")->params(["field" => $value])->fetchOrFail();
     }
 
     /**
@@ -123,9 +94,9 @@ class Table
      */
     public function find(int $id)
     {
-        return $this->fecthOrFail("SELECT * FROM {$this->table} WHERE id= ?", [$id]);
+        return $this->makeQuery()->where("id = $id")->fetchOrFail();
     }
-    
+
     /**
      * Compte le nombre d'enregistrement
      *
@@ -133,7 +104,7 @@ class Table
      */
     public function count()
     {
-        return $this->fecthColumn("SELECT COUNT(id) FROM {$this->table}");
+        return $this->makeQuery()->count();
     }
 
 
@@ -232,44 +203,5 @@ class Table
     public function getPdo(): PDO
     {
         return $this->pdo;
-    }
-    
-    /**
-     * Permet d'exécuter une requête et de récupérer une ligne dans un champ
-     *
-     * @param  string $query
-     * @param  array|null $param
-     * @return mixed
-     */
-    protected function fecthOrFail(string $query, ?array $param = [])
-    {
-        $query = $this->pdo->prepare($query);
-        $query->execute($param);
-        if ($this->entity) {
-            $query->setFetchMode(PDO::FETCH_CLASS, $this->entity);
-        }
-        $record = $query->fetch();
-
-        if ($record === false) {
-            throw new NoRecordException();
-        }
-        return $record;
-    }
-    
-    /**
-     * Récupère la première colonne
-     *
-     * @param  string $query
-     * @param  array $param
-     * @return void
-     */
-    protected function fecthColumn(string $query, ?array $param = [])
-    {
-        $query = $this->pdo->prepare($query);
-        $query->execute($param);
-        if ($this->entity) {
-            $query->setFetchMode(PDO::FETCH_CLASS, $this->entity);
-        }
-         return $query->fetchColumn();
     }
 }

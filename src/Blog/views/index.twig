@@ -43,14 +43,18 @@
 							<div class="card shadow-sm">
 								<h5>{{ post.name }}
 								</h5>
+									{% if post.image %}
+										<img src="{{post.thumb}}" alt="{{post.name}}" style="width=100%;">
+									{% else %}									
 								<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveaspectratio="xMidYMid slice" focusable="false">
 									<title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
 								</svg>
+									{% endif %}
 
 								<div class="card-body">
-									{% if post.category_name %}
+									{% if post.categoryName %}
 										<p>
-											<a href={{ path('blog.category', {slug: post.category_slug} ) }}>{{ post.category_name }}</a>
+											<a href={{ path('blog.category', {slug: post.categorySlug} ) }}>{{ post.categoryName }}</a>
 										</p>
 									{% endif %}
 									<p class="card-text">
@@ -63,7 +67,7 @@
 											</button>
 										</div>
 										<small class="text-muted">
-											{{ post.created_at | ago }}
+											{{ post.createdAt | ago }}
 										</small>
 									</div>
 								</div>

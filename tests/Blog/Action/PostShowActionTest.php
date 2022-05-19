@@ -33,7 +33,7 @@ class PostShowActionTest extends TestCase
         $this->action = new PostShowAction(
             $this->renderer->reveal(),
             $this->postTable->reveal(),
-            $this->router->revea
+            $this->router->reveal()
         );
     }
 

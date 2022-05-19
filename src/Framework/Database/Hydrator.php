@@ -3,9 +3,21 @@ namespace Framework\Database;
 
 class Hydrator
 {
-    public static function hydrate(array $array, string $object)
+
+    /**
+     * hydrate
+     *
+     * @param  array $array
+     * @param  string|object $object
+     * @return mixed
+     */
+    public static function hydrate(array $array, $object)
     {
-        $instance = new $object;
+        if (is_string($object)) {
+            $instance = new $object;
+        } else {
+            $instance = $object;
+        }
         foreach ($array as $key => $value) {
             $method = self::getSetter($key);
             if (method_exists($instance, $method)) {

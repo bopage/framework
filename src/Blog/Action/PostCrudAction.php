@@ -38,6 +38,13 @@ class PostCrudAction extends CrudAction
         $this->postUpload = $postUpload;
     }
 
+    public function delete(ServerRequestInterface $request)
+    {
+        $post = $this->Table->find($request->getAttribute('id'));
+        $this->postUpload->delete($post->image);
+        return parent::delete($request);
+    }
+
     protected function getNewEntity()
     {
         $post = new Post;
@@ -48,19 +55,23 @@ class PostCrudAction extends CrudAction
 
     protected function fromParams(array $params): array
     {
-         $params['categories'] = $this->categoryTable->findList();
-         $params['categories']['231546'] = 'fake category';
-         return $params;
+        $params['categories'] = $this->categoryTable->findList();
+        $params['categories']['231546'] = 'fake category';
+        return $params;
     }
 
     protected function getParams(ServerRequestInterface $request, $post): array
     {
         $params = array_merge($request->getParsedBody(), $request->getUploadedFiles());
         //uploader le fichier
-        $params['image'] = $this->postUpload->upload($params['image'], $post->image);
-
+        $image = $this->postUpload->upload($params['image'], $post->image);
+        if ($image) {
+            $params['image'] = $image;
+        } else {
+            unset($params['image']);
+        }
         $params =  array_filter($params, function ($key) {
-            return in_array($key, ['name', 'slug', 'content', 'created_at', 'category_id', 'image']);
+            return in_array($key, ['name', 'slug', 'content', 'created_at', 'category_id', 'image', 'published']);
         }, ARRAY_FILTER_USE_KEY);
 
         return array_merge($params, [
@@ -79,8 +90,8 @@ class PostCrudAction extends CrudAction
             ->exist('category_id', $this->categoryTable->getTable(), $this->categoryTable->getPdo())
             ->extension('image', ['jpg', 'png'])
             ->slug('slug');
-        
-        if (!is_null($request->getAttribute('id'))) {
+
+        if (is_null($request->getAttribute('id'))) {
             $validator->uploaded('image');
         }
         return $validator;
