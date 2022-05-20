@@ -11,7 +11,7 @@ interface SessionInterface
      *
      * @param  string $key
      * @param  mixed $default
-     * @return void
+     * @return mixed
      */
     public function get(string $key, $default = null);
     

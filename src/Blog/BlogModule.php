@@ -28,7 +28,7 @@ class BlogModule extends Module
     /**
      * Génère les routes
      *
-     * @param  Router $router
+     * @param  ContainerInterface $container
      * @return void
      */
     public function __construct(ContainerInterface $container)

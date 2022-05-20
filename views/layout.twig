@@ -21,10 +21,20 @@
 							<li class="nav-item">
 								<a class="nav-link active" aria-current="page" href="{{ path('blog.index') }}">Blog</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Link</a>
-							</li>
 						</ul>
+						<div class="navbar-nav me-auto mb-2 mb-md-0">
+							{% if current_user() %}
+									<p class="nav-link">{{current_user() . username}}</p>
+								<form class="nav-item" method='post' action='{{ path('auth.logout') }}'>
+									{{ csrfInput() }}
+									<button class="nav-link btn btn-primary">Se déconnecter</button>
+								</form>
+							{% else %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('auth.login') }}">Se connecter</a>
+								</li>
+							{% endif %}
+						</div>
 
 					</div>
 				</div>
@@ -32,7 +42,20 @@
 		</header>
 
 		<main>
-			{% block body %}{% endblock %}
+			<div class="container mt-4">
+				{% if flash('success') %}
+					<div class="alert alert-success">
+						{{ flash('success')}}
+					</div>
+				{% endif %}
+
+				{% if flash('error') %}
+					<div class="alert alert-danger">
+						{{ flash('error')}}
+					</div>
+				{% endif %}
+				{% block body %}{% endblock %}
+			</div>
 		</main>
 	</body>
 </html>

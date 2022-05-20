@@ -9,12 +9,7 @@ $migrations = [];
 
 $seeds = [];
 
-$modules = [
-    AdminModule::class,
-    BlogModule::class
-];
-
-foreach ($modules as $module) {
+foreach ($app->getModules() as $module) {
     if ($module::MIGRATIONS) {
         $migrations[] = $module::MIGRATIONS;
     }

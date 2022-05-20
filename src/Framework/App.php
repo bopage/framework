@@ -4,6 +4,7 @@ namespace Framework;
 
 use DI\ContainerBuilder;
 use Exception;
+use Framework\Middleware\RoutePrefixedMiddleware;
 use GuzzleHttp\Psr7\Response;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -63,9 +64,13 @@ class App implements RequestHandlerInterface
      * @param  string $middleware
      * @return self
      */
-    public function pipe(string $middleware): self
+    public function pipe(string $routePrefix, ?string $middleware = null): self
     {
-        $this->middlewares[] = $middleware;
+        if (is_null($middleware)) {
+            $this->middlewares[] = $routePrefix;
+        } else {
+            $this->middlewares[] = new RoutePrefixedMiddleware($this->getContainer(), $routePrefix, $middleware);
+        }
 
         return $this;
     }
@@ -114,11 +119,25 @@ class App implements RequestHandlerInterface
     private function getMiddlware(): object
     {
         if (array_key_exists($this->index, $this->middlewares)) {
-            $middleware = $this->container->get($this->middlewares[$this->index]);
+            if (is_string($this->middlewares[$this->index])) {
+                $middleware = $this->container->get($this->middlewares[$this->index]);
+            } else {
+                $middleware = $this->middlewares[$this->index];
+            }
             $this->index++;
             return $middleware;
         }
 
         return null;
+    }
+
+    /**
+     * Get liste des modules
+     *
+     * @return  array
+     */
+    public function getModules()
+    {
+        return $this->modules;
     }
 }

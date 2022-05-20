@@ -1,5 +1,7 @@
 <?php
 
+use Framework\Auth;
+use Framework\Auth\LoggedInMiddleware;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Renderer\RendererInterface;
 use Framework\Renderer\TwigRendererFactory;
