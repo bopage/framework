@@ -10,6 +10,7 @@ use Framework\Router;
 use Framework\Session\FlashService;
 use Framework\Validator;
 use Psr\Http\Message\ServerRequestInterface;
+use stdClass;
 
 class CrudAction
 {
@@ -49,6 +50,8 @@ class CrudAction
         'edit' => 'L\'élément a bien été modifié',
         'delete' => 'L\'élément a bien été supprimé'
     ];
+
+    protected $acceptedParams = [];
 
     use RouterAwareAction;
 
@@ -178,7 +181,7 @@ class CrudAction
     protected function getParams(ServerRequestInterface $request, $item): array
     {
         return  array_filter($request->getParsedBody(), function ($key) {
-            return in_array($key, []);
+            return in_array($key, $this->acceptedParams);
         }, ARRAY_FILTER_USE_KEY);
     }
 
@@ -199,7 +202,7 @@ class CrudAction
      */
     protected function getNewEntity()
     {
-        return [];
+        return new stdClass;
     }
 
     /**
