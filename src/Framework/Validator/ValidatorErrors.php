@@ -21,6 +21,7 @@ class ValidatorErrors
         'exist' => "La categorie %s n'existe pas dans la table %s",
         'unique' => "La champ %s doit être unique",
         'filetype' => "Le champ %s n'est pas au format valide (%s)",
+        'email' => "Cet email n'est pas valide",
         'uploaded' => 'Vous devez uploader un fichier'
     ];
 
@@ -33,7 +34,7 @@ class ValidatorErrors
 
     public function __toString()
     {
-        if (!array_key_exists($this->rule, $this->message)) {
+        if (!array_key_exists($this->rule, $this->messages)) {
             return "le champs {$this->key} ne correspond pas à la règle {$this->rule}";
         } else {
             $params = array_merge([$this->messages[$this->rule], $this->key], $this->attributes);

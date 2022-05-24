@@ -19,12 +19,16 @@
 					<div class="collapse navbar-collapse" id="navbarCollapse">
 						<ul class="navbar-nav me-auto mb-2 mb-md-0">
 							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="{{ path('blog.index') }}">Blog</a>
+								<a class="nav-link {{ is_subPath('blog.index') ? 'active'}} " aria-current="page">Blog</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link {{ is_subPath('contact') ? 'active'}}" href="{{ path('contact') }} ">Nous contacter</a>
+
 							</li>
 						</ul>
 						<div class="navbar-nav me-auto mb-2 mb-md-0">
 							{% if current_user() %}
-									<p class="nav-link">{{current_user() . username}}</p>
+								<p class="nav-link">{{current_user() . username}}</p>
 								<form class="nav-item" method='post' action='{{ path('auth.logout') }}'>
 									{{ csrfInput() }}
 									<button class="nav-link btn btn-primary">Se déconnecter</button>

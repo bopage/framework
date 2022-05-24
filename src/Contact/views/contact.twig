@@ -1,0 +1,13 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+
+	<form method="post" action="{{path('contact')}}" accept-charset="UTF-8">
+		{{ csrfInput() }}
+		{{field('name', null, 'Votre nom')}}
+		{{field('email', null, 'Votre email')}}
+		{{field('content', null, 'Votre message', {type: 'textarea'})}}
+        <button class="btn btn-primary">Envoyer</button>
+	</form>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Contact\MailerFactory;
 use Framework\Auth;
 use Framework\Auth\LoggedInMiddleware;
 use Framework\Middleware\CsrfMiddleware;
@@ -18,6 +19,7 @@ use Framework\Twig\PagerFantaExtension;
 use Framework\Twig\TextExtension;
 use Framework\Twig\TimeExtension;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 use function DI\create;
 use function DI\factory;
@@ -55,5 +57,8 @@ return [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]
         );
-    }
+    },
+    //Mailer
+    'mail.to' => 'bpgeorges18@gmail.com',
+    MailerInterface::class => factory(MailerFactory::class)
 ];

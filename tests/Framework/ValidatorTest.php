@@ -138,7 +138,7 @@ class ValidatorTest extends DatabaseTest
         $this->assertTrue($this->makeValidator(['category' => '1'])->exist('category', 'test', $pdo)->isValid());
         $this->assertFalse($this->makeValidator(['category' => '12'])->exist('category', 'test', $pdo)->isValid());
     }
-    
+
 
     public function testUnique()
     {
@@ -153,5 +153,11 @@ class ValidatorTest extends DatabaseTest
         $this->assertFalse($this->makeValidator(['name' => 'a1'])->unique('name', 'test', $pdo)->isValid());
         $this->assertTrue($this->makeValidator(['name' => 'a111'])->unique('name', 'test', $pdo)->isValid());
         $this->assertTrue($this->makeValidator(['name' => 'a1'])->unique('name', 'test', $pdo, 1)->isValid());
+    }
+
+    public function testEmail()
+    {
+        $this->assertTrue($this->makeValidator(['email' => 'demo@demo.com'])->email('email')->isValid());
+        $this->assertFalse($this->makeValidator(['email' => 'a1'])->email('email')->isValid());
     }
 }

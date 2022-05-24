@@ -119,6 +119,21 @@ class Validator
         }
         return $this;
     }
+    
+    /**
+     * Vérifie que l'email soit valide
+     *
+     * @param  string $key
+     * @return self
+     */
+    public function email(string $key): self
+    {
+        $value = $this->getValue($key);
+        if (filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
+            $this->addError($key, 'email');
+        }
+        return $this;
+    }
 
     /**
      * Vérifie le format de fichier

@@ -4,6 +4,7 @@ use App\Admin\AdminModule;
 use App\Auth\AuthModule;
 use App\Auth\ForbiddenMiddleware;
 use App\Blog\BlogModule;
+use App\Contact\ContactModule;
 use Framework\Middleware\DispatcherMiddleware;
 use Framework\Middleware\NotFoundMiddleware;
 use Framework\App;
@@ -28,6 +29,7 @@ $whoops->register();
 
 $app = (new App('config/config.php'))
     ->addModule(AdminModule::class)
+    ->addModule(ContactModule::class)
     ->addModule(BlogModule::class)
     ->addModule(AuthModule::class);
 $container = $app->getContainer();
