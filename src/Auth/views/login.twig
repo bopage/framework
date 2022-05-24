@@ -4,7 +4,7 @@
 	<form method="post" action="{{path('auth.login')}}" accept-charset="UTF-8">
 		{{ csrfInput() }}
 		{{field('username', null, "Nom d'utilisateur")}}
-		{{field('password', null, "Mot de passe")}}
+		{{field('password', null, "Mot de passe", {type: 'password'})}}
 		<button type="submit" class="btn btn-sm btn-outline-secondary">Connecter</button>
 	</form>
 {% endblock %}

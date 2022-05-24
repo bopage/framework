@@ -6,8 +6,6 @@ use App\Contact\ContactAction;
 use Framework\Renderer\RendererInterface;
 use Framework\Response\RedirectResponse;
 use Framework\Session\FlashService;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Tests\ActionTestCase;
@@ -17,28 +15,28 @@ class ContactActionTest extends ActionTestCase
     /**
      * renderer
      *
-     * @var RendererInterface
+     * @var RendererInterface|MockObject
      */
     private $renderer;
 
     /**
      * contact
      *
-     * @var ContactAction
+     * @var ContactAction|MockObject
      */
     private $action;
 
     /**
      *
      *
-     * @var FlashService
+     * @var FlashService|MockObject
      */
     private $flash;
 
     /**
      *
      *
-     * @var MailerInterface
+     * @var MailerInterface|MockObject
      */
     private $mailer;
 

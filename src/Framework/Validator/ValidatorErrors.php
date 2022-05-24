@@ -22,7 +22,8 @@ class ValidatorErrors
         'unique' => "La champ %s doit être unique",
         'filetype' => "Le champ %s n'est pas au format valide (%s)",
         'email' => "Cet email n'est pas valide",
-        'uploaded' => 'Vous devez uploader un fichier'
+        'uploaded' => 'Vous devez uploader un fichier',
+        'confirm' => 'Le mot de passe n\'est pas confirmé %s'
     ];
 
     public function __construct(string $key, string $rule, array $attributes = [])

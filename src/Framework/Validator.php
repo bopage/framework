@@ -3,6 +3,7 @@
 namespace Framework;
 
 use DateTime;
+use Framework\Database\Table;
 use Framework\Validator\ValidatorErrors;
 use PDO;
 use Psr\Http\Message\UploadedFileInterface;
@@ -135,6 +136,16 @@ class Validator
         return $this;
     }
 
+    public function confirm(string $key): self
+    {
+        $value = $this->getValue($key);
+        $valueConfirm = $this->getValue($key. '_confirm');
+        if ($value !== $valueConfirm) {
+            $this->addError($key, 'confirm');
+        }
+        return $this;
+    }
+
     /**
      * Vérifie le format de fichier
      *
@@ -190,13 +201,17 @@ class Validator
      * Vérifie qu'une clée est uniqeue
      *
      * @param  string $key
-     * @param  string $table
+     * @param  string|Table $table
      * @param  PDO $pdo
      * @param  int|null $exclude
      * @return self
      */
-    public function unique(string $key, string $table, PDO $pdo, ?int $exclude = null): self
+    public function unique(string $key, $table, ?PDO $pdo = null, ?int $exclude = null): self
     {
+        if ($table instanceof Table) {
+            $pdo = $table->getPdo();
+            $table = $table->getTable();
+        }
         $value = $this->getValue($key);
         $query = "SELECT id FROM {$table} WHERE $key = ?";
         $params = [$value];

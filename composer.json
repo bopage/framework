@@ -27,6 +27,7 @@
         "fakerphp/faker": "^1.19",
         "robmorgan/phinx": "^0.12.10",
         "phpunit/phpunit": "^9.5",
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpspec/prophecy-phpunit": "^2.0"
     }
 }

@@ -39,7 +39,7 @@ class FormExtensionTest extends TestCase
         $html = $this->formExtension->field($context, 'name', 'Demo', 'Titre');
         $this->assertSimilar("<div class='mb-3'>
             <label for='name' class='form-label'>Titre</label>
-            <input type='text' class='form-control is-invalid' name='name' id='name' value='Demo'>
+            <input class='form-control is-invalid' name='name' id='name' type='text' value='Demo'>
             <div class='invalid-feedback'>erreur</div></div>", $html);
     }
 
@@ -48,7 +48,7 @@ class FormExtensionTest extends TestCase
         $html = $this->formExtension->field([], 'name', 'Demo', 'Titre');
         $this->assertSimilar("<div class='mb-3'>
             <label for='name' class='form-label'>Titre</label>
-            <input type='text' class='form-control' name='name' id='name' value='Demo'>
+            <input class='form-control' name='name' id='name' type='text' value='Demo'>
             </div>", $html);
     }
 
@@ -72,7 +72,7 @@ class FormExtensionTest extends TestCase
         );
         $this->assertSimilar("<div class='mb-3'>
             <label for='name' class='form-label'>Titre</label>
-            <input type='text' class='form-control demo' name='name' id='name' value='Demo'>
+            <input class='form-control demo' name='name' id='name' type='text' value='Demo'>
             </div>", $html);
     }
 
