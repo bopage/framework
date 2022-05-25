@@ -20,6 +20,18 @@ class User extends AuthUser
      * @var string
      */
     private $lastname;
+    
+    /**
+     * role
+     *
+     * @var string
+     */
+    private $role;
+
+    public function getRoles(): array
+    {
+        return [$this->role];
+    }
 
     /**
      * Get firtname
@@ -65,6 +77,30 @@ class User extends AuthUser
     public function setLastname(string $lastname)
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return  string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set role
+     *
+     * @param  string  $role  role
+     *
+     * @return  self
+     */
+    public function setRole(string $role)
+    {
+        $this->role = $role;
 
         return $this;
     }

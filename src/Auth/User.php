@@ -16,7 +16,7 @@ class User implements AuthUser
         return $this->username;
     }
 
-    public function getRole(): array
+    public function getRoles(): array
     {
         return [];
     }

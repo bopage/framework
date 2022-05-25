@@ -18,5 +18,5 @@ interface User
      *
      * @return string[]
      */
-    public function getRole(): array;
+    public function getRoles(): array;
 }
