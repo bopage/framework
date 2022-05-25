@@ -60,7 +60,7 @@ class SignUpAction
             $user->id = $this->userTable->getPdo()->lastInsertId();
             $this->auth->setUser($user);
             $this->flashService->success('Votre compte a bien été crée');
-            return new RedirectResponse($this->router->generateUri('account.profil'));
+            return new RedirectResponse($this->router->generateUri('account'));
         } else {
             $errors = $validator->getErrors();
             return $this->renderer->render('@account/signup', [

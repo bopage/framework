@@ -1,4 +1,5 @@
 <?php
+
 namespace Framework\Middleware;
 
 use Exception;
@@ -26,16 +27,9 @@ class DispatcherMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
         $callback = $route->getCallback();
-        if (is_string($callback)) {
-            $callback = $this->container->get($callback);
+        if (!is_array($callback)) {
+            $callback = [$callback];
         }
-        $reponse = call_user_func_array($callback, [$request]);
-        if (is_string($reponse)) {
-            return new Response(200, [], $reponse);
-        } elseif ($reponse instanceof Response) {
-            return $reponse;
-        } else {
-            throw new Exception('La reponse n\'est une chaîne de caractère ou une instance de Response');
-        }
+        return (new CombinedMiddleware($this->container, $callback))->process($request, $handler);
     }
 }

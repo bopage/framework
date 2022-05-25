@@ -4,6 +4,7 @@ namespace Framework;
 
 use DI\ContainerBuilder;
 use Exception;
+use Framework\Middleware\CombinedMiddleware;
 use Framework\Middleware\RoutePrefixedMiddleware;
 use GuzzleHttp\Psr7\Response;
 use Psr\Container\ContainerInterface;
@@ -78,11 +79,11 @@ class App implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var MiddlewareInterface */
-        $middleware = $this->getMiddlware();
-        if (is_null($middleware)) {
-            throw new Exception('Aucun middleware n\ a intercepté cette requête');
+        $this->index++;
+        if ($this->index > 1) {
+            throw new Exception();
         }
+        $middleware = new CombinedMiddleware($this->getContainer(), $this->middlewares);
         return $middleware->process($request, $this);
     }
 
@@ -119,20 +120,6 @@ class App implements RequestHandlerInterface
         return $this->container;
     }
 
-    private function getMiddlware(): object
-    {
-        if (array_key_exists($this->index, $this->middlewares)) {
-            if (is_string($this->middlewares[$this->index])) {
-                $middleware = $this->container->get($this->middlewares[$this->index]);
-            } else {
-                $middleware = $this->middlewares[$this->index];
-            }
-            $this->index++;
-            return $middleware;
-        }
-
-        return null;
-    }
 
     /**
      * Get liste des modules
