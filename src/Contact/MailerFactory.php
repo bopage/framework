@@ -4,7 +4,6 @@ namespace App\Contact;
 
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport;
-use Twig\Environment;
 
 class MailerFactory
 {

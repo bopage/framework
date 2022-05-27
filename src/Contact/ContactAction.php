@@ -48,6 +48,7 @@ class ContactAction
             $message = (new Email())
                     ->to($this->to)
                     ->from($params['email'])
+                    ->html($this->renderer->render('@contact/email/contact.html', $params))
                     ->text($this->renderer->render('@contact/email/contact.text', $params));
             $this->mailer->send($message);
             return new RedirectResponse((string)$request->getUri());

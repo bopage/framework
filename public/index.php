@@ -15,6 +15,7 @@ use Framework\Auth\RoleMiddleware;
 use Framework\Auth\RoleMiddlewareFactory;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\MethodMiddleware;
+use Framework\Middleware\RendererRequestMiddleware;
 use Framework\Middleware\RouterMiddleware;
 use Framework\Middleware\TrailingSlashMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;
@@ -45,6 +46,7 @@ $app->pipe(TrailingSlashMiddleware::class)
         $container->get(RoleMiddlewareFactory::class)->makeForRole('admin')
     )
     ->pipe(MethodMiddleware::class)
+    ->pipe(RendererRequestMiddleware::class)
     ->pipe(CsrfMiddleware::class)
     ->pipe(RouterMiddleware::class)
     ->pipe(DispatcherMiddleware::class)

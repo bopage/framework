@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Framework\Middleware\MethodMiddleware;
+namespace Tests\Framework\Middleware;
 
 use Framework\Middleware\MethodMiddleware;
 use GuzzleHttp\Psr7\ServerRequest;

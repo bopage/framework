@@ -3,9 +3,8 @@
 {% block body %}
 	<form method="post" action="{{path('auth.login')}}" accept-charset="UTF-8">
 		{{ csrfInput() }}
-		{{field('username', null, "Nom d'utilisateur")}}
 		{{field('password', null, "Mot de passe", {type: 'password'})}}
-		<button type="submit" class="btn btn-sm btn-outline-secondary">Connecter</button>
+		{{field('password_confirm', null, "Confirmer le mot de passe", {type: 'password'})}}
+		<button type="submit" class="btn btn-sm btn-outline-secondary">Réinitialiser</button>
 	</form>
-	<p><a href="{{ path("auth.password") }}">Mot de pass oublié?</a></p>
 {% endblock %}

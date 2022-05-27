@@ -60,5 +60,6 @@ return [
     },
     //Mailer
     'mail.to' => 'bpgeorges18@gmail.com',
+    'mail.from' => 'noreply@gmail.com',
     MailerInterface::class => factory(MailerFactory::class)
 ];

@@ -49,6 +49,21 @@ class Router
         $this->router->addRoute(new RouterRoute($path, new CallableMiddleware($callback), ['POST'], $name));
     }
 
+          /**
+     * Enregistrement des routes en POST DELETE GET PUT
+     *
+     * @param  string $path
+     * @param  callable|string $callback
+     * @param  string $name
+     * @return void
+     */
+    public function any(string $path, $callback, ?string $name = null)
+    {
+        $this->router->addRoute(
+            new RouterRoute($path, new CallableMiddleware($callback), ['POST', 'DELETE', 'GET', 'PUT'], $name)
+        );
+    }
+
        /**
      * Enregistrement des routes en DELETE
      *

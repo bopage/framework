@@ -25,6 +25,8 @@ class Post
     {
         if (is_string($datetime)) {
             $this->createdAt = new DateTime($datetime);
+        } else {
+            $this->createdAt = $datetime;
         }
     }
 
@@ -32,6 +34,8 @@ class Post
     {
         if (is_string($datetime)) {
             $this->updatedAt = new DateTime($datetime);
+        } else {
+            $this->updatedAt = $datetime;
         }
     }
 
