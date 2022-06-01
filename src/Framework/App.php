@@ -55,7 +55,7 @@ class App implements RequestHandlerInterface
     public function addModule(string $modules): self
     {
         $this->modules[] = $modules;
-
+        
         return $this;
     }
 

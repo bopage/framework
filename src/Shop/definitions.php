@@ -1,13 +1,12 @@
 <?php
 
-use App\Blog\BlogWidget;
+use App\Shop\ShopWidget;
 
 use function DI\add;
 use function DI\get;
 
 return [
-    'blog.prefix' => '/blog',
     'admin.widgets' => add([
-        get(BlogWidget::class)
+        get(ShopWidget::class)
     ])
 ];

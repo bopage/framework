@@ -1,0 +1,13 @@
+<div class="col-sm-4">
+	<div class="card">
+		<div class="card-body">
+			<p class="card-text">
+				{% if count > 1 %}
+					{{count}}
+				{% endif %}
+				Produits
+			</p>
+			<a href="{{ path('shop.admin.products.index')}}" class='btn btn-primary'>Gérer les produits</a>
+		</div>
+	</div>
+</div>

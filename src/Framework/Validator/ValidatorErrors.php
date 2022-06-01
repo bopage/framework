@@ -23,7 +23,8 @@ class ValidatorErrors
         'filetype' => "Le champ %s n'est pas au format valide (%s)",
         'email' => "Cet email n'est pas valide",
         'uploaded' => 'Vous devez uploader un fichier',
-        'confirm' => 'Le mot de passe n\'est pas confirmé %s'
+        'confirm' => 'Le mot de passe n\'est pas confirmé %s',
+        'numeric' => 'Le champ %s n\'est pas numerique'
     ];
 
     public function __construct(string $key, string $rule, array $attributes = [])

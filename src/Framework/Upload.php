@@ -17,12 +17,20 @@ class Upload
             $this->path = $path;
         }
     }
-
-    public function upload(UploadedFileInterface $file, ?string $oldFile = null): ?string
+    
+    /**
+     * Permet d'uploader un fichier
+     *
+     * @param  UploadedFileInterface $file
+     * @param  string $oldFile
+     * @param  string $fileName
+     * @return string
+     */
+    public function upload(UploadedFileInterface $file, ?string $oldFile = null, ?string $fileName = null): ?string
     {
         if ($file->getError() === UPLOAD_ERR_OK) {
             $this->delete($oldFile);
-            $fileName = $file->getClientFilename();
+            $fileName = $fileName ?: $file->getClientFilename();
             $targetPath = $this->addCopySuffix($this->path . '/' . $fileName);
             $dirname = pathinfo($targetPath, PATHINFO_DIRNAME);
             if (!file_exists($dirname)) {

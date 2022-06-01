@@ -28,11 +28,14 @@ class Validator
     /**
      * Definit les champs obligatoires
      *
-     * @param  string $keys les champs requis
+     * @param  mixed $keys les champs requis
      * @return self
      */
-    public function required(string ...$keys): self
+    public function required(...$keys): self
     {
+        if (is_array($keys[0])) {
+            $keys = $keys[0];
+        }
         foreach ($keys as $key) {
             $value = $this->getValue($key);
             if (is_null($value)) {
@@ -101,6 +104,21 @@ class Validator
         $pattern = '/^[a-z0-9]+(-[a-z0-9]+?)*$/';
         if (!is_null($value) && !preg_match($pattern, $value)) {
             $this->addError($key, 'slug');
+        }
+        return $this;
+    }
+
+    /**
+     * Vérifie que le champ est numerique
+     *
+     * @param  mixed $key
+     * @return self
+     */
+    public function numeric(string $key): self
+    {
+        $value = $this->getValue($key);
+        if (!is_numeric($value)) {
+            $this->addError($key, 'numeric');
         }
         return $this;
     }

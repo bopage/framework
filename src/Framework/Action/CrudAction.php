@@ -113,11 +113,13 @@ class CrudAction
     public function edit(ServerRequestInterface $request)
     {
         $errors = null;
-        $item = $this->Table->find($request->getAttribute('id'));
+        $id = (int)$request->getAttribute('id');
+        $item = $this->Table->find($id);
         if ($request->getMethod() === 'POST') {
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
-                $this->Table->update($item->id, $this->getParams($request, $item));
+                $this->Table->update($id, $this->prePersist($request, $item));
+                $this->postPersist($request, $item);
                 $this->flashService->success($this->message['edit']);
                 return $this->redirect($this->routePrefix . '.index');
             }
@@ -143,7 +145,8 @@ class CrudAction
         if ($request->getMethod() === 'POST') {
             $valid = $this->getValidator($request);
             if ($valid->isValid()) {
-                $this->Table->insert($this->getParams($request, $item));
+                $this->Table->insert($this->prePersist($request, $item));
+                $this->postPersist($request, $item);
                 $this->flashService->success($this->message['create']);
                 return $this->redirect($this->routePrefix . '.index');
             }
@@ -178,11 +181,22 @@ class CrudAction
      * @param   $item Représente une entitée
      * @return array
      */
-    protected function getParams(ServerRequestInterface $request, $item): array
+    protected function prePersist(ServerRequestInterface $request, $item): array
     {
         return  array_filter($request->getParsedBody(), function ($key) {
             return in_array($key, $this->acceptedParams);
         }, ARRAY_FILTER_USE_KEY);
+    }
+
+     /**
+     * Permet de persiter les paramètres après la sauvegarde
+     *
+     * @param  ServerRequestInterface $request
+     * @param   $item Représente une entitée
+     * @return array
+     */
+    protected function postPersist(ServerRequestInterface $request, $item)
+    {
     }
 
     /**
@@ -202,7 +216,8 @@ class CrudAction
      */
     protected function getNewEntity()
     {
-        return new stdClass;
+        $entity = $this->Table->getEntity();
+        return new $entity;
     }
 
     /**

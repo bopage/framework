@@ -5,7 +5,6 @@ namespace App\Contact;
 use Framework\Module;
 use Framework\Renderer\RendererInterface;
 use Framework\Router;
-use SebastianBergmann\CodeCoverage\Report\Html\Renderer;
 
 class ContactModule extends Module
 {

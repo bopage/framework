@@ -8,7 +8,6 @@ require 'public/index.php';
 $migrations = [];
 
 $seeds = [];
-
 foreach ($app->getModules() as $module) {
     if ($module::MIGRATIONS) {
         $migrations[] = $module::MIGRATIONS;

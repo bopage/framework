@@ -6,12 +6,10 @@ use App\Auth\AuthModule;
 use App\Auth\ForbiddenMiddleware;
 use App\Blog\BlogModule;
 use App\Contact\ContactModule;
+use App\Shop\ShopModule;
 use Framework\Middleware\DispatcherMiddleware;
 use Framework\Middleware\NotFoundMiddleware;
 use Framework\App;
-use Framework\Auth;
-use Framework\Auth\LoggedInMiddleware;
-use Framework\Auth\RoleMiddleware;
 use Framework\Auth\RoleMiddlewareFactory;
 use Framework\Middleware\CsrfMiddleware;
 use Framework\Middleware\MethodMiddleware;
@@ -33,11 +31,13 @@ $whoops->register();
 
 
 $app = (new App('config/config.php'))
-    ->addModule(AdminModule::class)
-    ->addModule(ContactModule::class)
-    ->addModule(BlogModule::class)
-    ->addModule(AuthModule::class)
-    ->addModule(AccountModule::class);
+->addModule(AdminModule::class)
+->addModule(ContactModule::class)
+->addModule(ShopModule::class)
+->addModule(BlogModule::class)
+->addModule(AuthModule::class)
+->addModule(AccountModule::class);
+
 $container = $app->getContainer();
 $app->pipe(TrailingSlashMiddleware::class)
     ->pipe(ForbiddenMiddleware::class)

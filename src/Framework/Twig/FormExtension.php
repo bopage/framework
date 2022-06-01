@@ -26,18 +26,25 @@ class FormExtension extends AbstractExtension
      * @param  mixed $value
      * @param  string $label
      * @param  array $option
+     * @param  array $attributes
      * @return string
      */
-    public function field(array $context, string $key, $value, ?string $label = null, array $option = []): string
-    {
+    public function field(
+        array $context,
+        string $key,
+        $value,
+        ?string $label = null,
+        array $option = [],
+        array $attributes = []
+    ): string {
         $type = $option['type'] ?? 'text';
         $error = $this->getErrors($context, $key);
         $value = $this->convertValue($value);
-        $attributes = [
+        $attributes = array_merge([
             'class' => trim('form-control ' . ($option['class'] ?? '')),
             'name' => $key,
             'id' => $key
-        ];
+        ], $attributes);
         if ($error) {
             $attributes['class'] .= ' is-invalid';
         }
@@ -119,7 +126,7 @@ class FormExtension extends AbstractExtension
         return $html . "<input type='checkbox' " . $attributes . " value='1'>";
     }
 
-     /**
+    /**
      * Génère l'<input>
      *
      * @param  string[] $attributes
