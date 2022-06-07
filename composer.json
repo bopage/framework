@@ -18,7 +18,7 @@
         "symfony/mailer": "^6.0",
         "ramsey/uuid": "^4.3",
         "stripe/stripe-php": "^7.123",
-        "spaze/vat-calculator": "^1.5"
+        "mpociot/vat-calculator": "^3.0"
     },
     "require-dev": {
         "dms/phpunit-arraysubset-asserts": "^0.4.0",
