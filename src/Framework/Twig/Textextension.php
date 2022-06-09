@@ -17,7 +17,7 @@ class TextExtension extends AbstractExtension
         ];
     }
 
-    public function getExcerpt(string $content, ?int $maxlength = 100): string
+    public function getExcerpt($content, ?int $maxlength = 100): string
     {
         if (mb_strlen($content) > $maxlength) {
             $excerpt = mb_substr($content, 0, $maxlength);

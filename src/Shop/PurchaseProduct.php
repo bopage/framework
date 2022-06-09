@@ -43,11 +43,14 @@ class PurchaseProduct
         }
         //Calculer le prix TTC
         $card = $this->stripe->getCardFromClient($token);
-        $grossPrice = (new VatCalculator())->calculate($product->getPrice(), $card->country);
+        $vatCalculator = new VatCalculator();
+        $grossPrice = $vatCalculator->calculate($product->getPrice(), $card->country);
+        $taxRate = $vatCalculator->getTaxRate();
         //Créer ou récupérer le customer de l'utilisateur. Le customer représente l'utilisateur au niveau de l'api
         $customer = $this->findCustomerForUser($user, $token);
         //Créer ou récupérer la carte de l'utilisateur
-        if (!$this->hasCard($customer, $card)) {
+        $card = $this->getMatchingCard($customer, $card);
+        if ($card === null) {
             $card = $this->stripe->createCardForCustomer($customer, $token);
         }
         //facturer l'utilisateur (créer la charge)
@@ -63,7 +66,7 @@ class PurchaseProduct
             'user_id' => $user->getId(),
             'product_id' => $product->getId(),
             'price' => $product->getPrice(),
-            'vat' => ,
+            'vat' => $taxRate,
             'created_at' => date('Y-m-d H:i:s'),
             'stripe_id' => $charge->id
         ]);
@@ -76,12 +79,13 @@ class PurchaseProduct
      * @param  Card $card
      * @return bool
      */
-    private function hasCard(Customer $customer, Card $card): bool
+    private function getMatchingCard(Customer $customer, Card $card): ?Card
     {
-        $fingerprints = array_map(function ($source) {
-            return $source->fingerprint;
-        }, $customer->sources->all());
-        return in_array($card->fingerprint, $fingerprints);
+        foreach ($customer->sources->show_source as $data) {
+            $data->fingerprint === $card->fingerprint;
+            return $data;
+        }
+        return null;
     }
     
     /**

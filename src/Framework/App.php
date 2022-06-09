@@ -33,17 +33,23 @@ class App implements RequestHandlerInterface
     /**
      * Le dossier de configuration
      *
-     * @var string|array|null
+     * @var array
      */
-    private $definition;
+    private $definitions;
 
     private $middlewares = [];
 
     private $index = 0;
 
-    public function __construct($definition = null)
+    public function __construct($definitions = [])
     {
-        $this->definition = $definition;
+        if (is_string($definitions)) {
+            $this->definitions = [$definitions];
+        }
+        if (!$this->isSequential($definitions)) {
+            $this->definitions = [$definitions];
+        }
+        $this->definitions = $definitions;
     }
 
     /**
@@ -106,8 +112,8 @@ class App implements RequestHandlerInterface
                 $builder->enableCompilation('tmp');
                 $builder->writeProxiesToFile(true, 'tmp/proxies');
             }
-            if ($this->definition) {
-                $builder->addDefinitions($this->definition);
+            foreach ($this->definitions as $definition) {
+                $builder->addDefinitions($definition);
             }
             foreach ($this->modules as $module) {
                 if ($module::DEFINITIONS) {
@@ -129,5 +135,14 @@ class App implements RequestHandlerInterface
     public function getModules()
     {
         return $this->modules;
+    }
+
+    private function isSequential(array $array): bool
+    {
+        if (empty($array)) {
+            return true;
+        }
+
+        return array_keys($array) === range(0, count($array) - 1);
     }
 }

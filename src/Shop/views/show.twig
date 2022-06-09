@@ -1,0 +1,48 @@
+{% extends 'layout.twig' %}
+
+{% block link %}
+	<link href="/meta/checkout.css" rel="stylesheet">
+{% endblock %}
+
+{% block title product.name %}
+
+{% block body %}
+	<div class="card mb-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-4">
+				{% if product.image %}
+					<img src="{{product.thumb}}" alt="{{product.name}}" class="img-fluid rounded-start" style="width=100%;">
+				{% endif %}
+			</div>
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">{{product.name }}</h5>
+					<p class="card-text">{{product.description}}</p>
+					<p class="card-text">
+						<small>{{product.price | number_format(2, ',')}} €</small>
+					</p>
+					{% if current_user() %}
+						<!-- Display a payment form -->
+					<form id="payment-form" method="post" action="{{path('shop.recap', {id: product.id})}}">
+					{{ csrfInput() }}
+						<div
+							id="payment-element"><!--Stripe.js injects the Payment Element-->
+						</div>
+						<button id="submit">
+							<div class="spinner hidden" id="spinner"></div>
+							<span id="button-text">Pay now</span>
+						</button>
+						<div id="payment-message" class="hidden"></div>
+					</form>
+					{% else %}
+						<a href="{{path('auth.login')}}" class="btn btn-primary"> Acheter le produit</a>
+					{% endif %}				
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script src="https://js.stripe.com/v3/"></script>
+	<script src="/meta/checkout.js" defer></script>
+{% endblock %}

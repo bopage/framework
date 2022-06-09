@@ -1,0 +1,64 @@
+{% extends 'layout.twig' %}
+
+{% block title %}
+
+
+		PRODUITS
+		{% if page > 1 %}, page
+			{{page}}
+		{% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+	
+		<h2 class="mt-4 mb-4 text-center">PRODUITS
+			{% if page > 1 %}, page
+				{{page}}
+			{% endif %}
+		</h2>
+
+	<div class='container'>
+		<div class="row">
+
+			<div class="col-md-9">
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+					{% for product in products %}
+						<div class="col">
+							<div class="card shadow-sm">
+								<h5>{{ product.name }}
+								</h5>
+									{% if product.image %}
+										<img src="{{product.thumb}}" alt="{{product.name}}" style="width=100%;">
+									{% else %}									
+								<svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveaspectratio="xMidYMid slice" focusable="false">
+									<title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+								</svg>
+									{% endif %}
+
+								<div class="card-body">
+									<p class="card-text">
+										{{product.description |  excerpt | nl2br}}
+									</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<button type="button" class="btn btn-sm btn-outline-secondary">
+												<a href={{ path('shop.show', {slug: product.slug} ) }}>Voir plus</a>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					{% endfor %}
+				</div>
+					{{ paginate(products, 'shop.index',)}}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

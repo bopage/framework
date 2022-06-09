@@ -4,6 +4,7 @@ use App\Account\AccountModule;
 use App\Admin\AdminModule;
 use App\Auth\AuthModule;
 use App\Auth\ForbiddenMiddleware;
+use App\Blog\Action\PostIndexAction;
 use App\Blog\BlogModule;
 use App\Contact\ContactModule;
 use App\Shop\ShopModule;
@@ -16,6 +17,7 @@ use Framework\Middleware\MethodMiddleware;
 use Framework\Middleware\RendererRequestMiddleware;
 use Framework\Middleware\RouterMiddleware;
 use Framework\Middleware\TrailingSlashMiddleware;
+use Framework\Router;
 use GuzzleHttp\Psr7\ServerRequest;
 
 use function Http\Response\send;
@@ -30,7 +32,7 @@ $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
 
-$app = (new App('config/config.php'))
+$app = (new App(['config/config.php', 'config.php']))
 ->addModule(AdminModule::class)
 ->addModule(ContactModule::class)
 ->addModule(ShopModule::class)
@@ -39,6 +41,7 @@ $app = (new App('config/config.php'))
 ->addModule(AccountModule::class);
 
 $container = $app->getContainer();
+$container->get(Router::class)->get('/', PostIndexAction::class, 'home');
 $app->pipe(TrailingSlashMiddleware::class)
     ->pipe(ForbiddenMiddleware::class)
     ->pipe(

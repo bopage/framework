@@ -1,0 +1,68 @@
+{% extends 'layout.twig' %}
+
+{% block link %}
+	<link href="/meta/checkout.css" rel="stylesheet">
+{% endblock %}
+
+{% block title product.name %}
+
+{% block body %}
+	<div class="card mb-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-4">
+				{% if product.image %}
+					<img src="{{product.thumb}}" alt="{{product.name}}" class="img-fluid rounded-start" style="width=100%;">
+				{% endif %}
+			</div>
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">Récapitulatif du produit</h5>
+					<p class="card-text">
+						<h2>Infomation de paiements</h2>
+					</p>
+					<p>
+						{{card.brand}}
+						- *** ***
+						{{card.last4}}
+					</p>
+					<h2>Infomation de commande</h2>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Nom du produit</th>
+								<th>Prix HT</th>
+								<th>TVA</th>
+								<th>Prix TTC</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{product.name}}</td>
+								<td>{{product.price | number_format(2, ',',' ')}}
+									€</td>
+								<td>{{taxRate | number_format(2, ',',' ')}}
+									%</td>
+								<td>{{grossPrice | number_format(2, ',',' ')}}
+									€</td>
+							</tr>
+						</tbody>
+					</table>
+					{% if current_user() %}
+						<form action="{{ path('shop.process', {id: product.id}) }}" method="post">
+						{{ csrfInput() }}
+							<input type="input" name="{{stripeToken}}">
+							<input type="submit" class="btn btn-primary" value="pay">
+						</form>
+					{% else %}
+						<a href="{{path('auth.login')}}" class="btn btn-primary">
+							Acheter le produit</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script src="https://js.stripe.com/v3/"></script>
+	<script src="/meta/checkout.js" defer></script>
+{% endblock %}
