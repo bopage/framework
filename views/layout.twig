@@ -31,6 +31,10 @@
 						</ul>
 						<div class="navbar-nav me-auto mb-2 mb-md-0">
 							{% if current_user() %}
+							<li class="nav-item">
+								<a class="nav-link {{ is_subPath('shop.purchases') ? 'active'}}" href="{{ path('shop.purchases') }} ">Mes achats</a>
+
+							</li>
 								<p class="nav-link">{{current_user() . username}}</p>
 								<form class="nav-item" method='post' action='{{ path('auth.logout') }}'>
 									{{ csrfInput() }}

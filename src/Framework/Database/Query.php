@@ -165,6 +165,16 @@ class Query implements IteratorAggregate
         }
         return $record;
     }
+
+    /**
+     * Récupère un résultat
+     *
+     * @return mixed
+     */
+    public function fetchColumn(int $columnNumber = 0)
+    {
+        return $this->execute()->fetchColumn($columnNumber);
+    }
     
     /**
      * Retourne un résultat ou renvoie une exeption

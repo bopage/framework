@@ -36,9 +36,9 @@ class User extends AuthUser
     /**
      * Get firtname
      *
-     * @return  string
+     * @return  string|null
      */
-    public function getFirtname(): string
+    public function getFirtname(): ?string
     {
         return $this->firtname;
     }
@@ -60,9 +60,9 @@ class User extends AuthUser
     /**
      * Get lastname
      *
-     * @return  string
+     * @return  string|null
      */
-    public function getLastname(): string
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }

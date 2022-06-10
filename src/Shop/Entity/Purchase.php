@@ -94,6 +94,14 @@ class Purchase
         return $this->price;
     }
 
+      /**
+     * Renvoie la TVA de l'achat
+     */
+    public function getVatPrice(): ?float
+    {
+        return $this->price * $this->vat / 100;
+    }
+
     /**
      * Set the value of price
      *
@@ -159,10 +167,13 @@ class Purchase
      *
      * @return  self
      */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->createdAt = $createdAt;
-
+        if (is_string($createdAt)) {
+            $this->createdAt = new DateTime($createdAt);
+        } else {
+            $this->createdAt = $createdAt;
+        }
         return $this;
     }
 
