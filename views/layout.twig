@@ -31,6 +31,12 @@
 							</li>
 						</ul>
 						<div class="navbar-nav me-auto mb-2 mb-md-0">
+							{% if module_enabled('basket') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{path('basket')}}">
+										<span class="iconic iconic-basket" title="basket" aria-hidden="true"></span>Mon panier({{basket_count()}})</a>
+								</li>
+							{% endif %}
 							{% if current_user() %}
 								<li class="nav-item">
 									<a class="nav-link {{ is_subPath('shop.purchases') ? 'active'}}" href="{{ path('shop.purchases') }} ">Mes achats</a>
@@ -42,12 +48,6 @@
 									<button class="nav-link btn btn-primary">Se déconnecter</button>
 								</form>
 							{% else %}
-								{% if module_enabled('basket') %}
-									<li class="nav-item">
-										<a class="nav-link" href="{{path('basket')}}">
-											<span class="iconic iconic-basket" title="basket" aria-hidden="true"></span>Mon panier({{basket_count()}})</a>
-									</li>
-								{% endif %}
 								<li class="nav-item">
 									<a class="nav-link" href="{{ path('auth.login') }}">Se connecter</a>
 								</li>

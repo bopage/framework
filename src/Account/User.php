@@ -13,7 +13,7 @@ class User extends AuthUser
      *
      * @var string
      */
-    private $firtname;
+    private $firstname;
     /**
      * lastname
      *
@@ -34,25 +34,25 @@ class User extends AuthUser
     }
 
     /**
-     * Get firtname
+     * Get firstname
      *
      * @return  string|null
      */
-    public function getFirtname(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->firtname;
+        return $this->firstname;
     }
 
     /**
-     * Set firtname
+     * Set firstname
      *
      * @param  string  $firtname  firtname
      *
      * @return  self
      */
-    public function setFirtname(string $firtname)
+    public function setFirstname(string $firstname)
     {
-        $this->firtname = $firtname;
+        $this->firstname = $firstname;
 
         return $this;
     }

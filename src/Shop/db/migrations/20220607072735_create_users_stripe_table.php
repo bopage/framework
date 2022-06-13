@@ -18,11 +18,11 @@ final class CreateUsersStripeTable extends AbstractMigration
      */
     public function change(): void
     {
-        $this->table('users_stripe')
+       /* $this->table('users_stripe')
             ->addColumn('user_id', 'integer')
             ->addForeignKey('user_id', 'users', 'id')
             ->addColumn('customer_id', 'integer')
             ->addColumn('created_at', 'datetime')
-            ->create();
+            ->create(); */
     }
 }

@@ -84,7 +84,7 @@ class Basket
      * @param  Product $product
      * @return BasketRow
      */
-    private function getRow(Product $product): ?BasketRow
+    protected function getRow(Product $product): ?BasketRow
     {
         /** @var BasketRow */
         foreach ($this->rows as $row) {
@@ -93,5 +93,15 @@ class Basket
             }
         }
         return null;
+    }
+    
+    /**
+     * Vide le panier
+     *
+     * @return void
+     */
+    public function empty()
+    {
+        $this->rows = [];
     }
 }

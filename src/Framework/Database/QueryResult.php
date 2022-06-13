@@ -77,4 +77,18 @@ class QueryResult implements ArrayAccess, Iterator
     {
         throw new Exception('can\'t change records');
     }
+    
+    /**
+     * Renvoie un enregistrement avec les tableaux hygratés
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $records = [];
+        foreach ($this->records as $k => $v) {
+            $records[] = $this->get($k);
+        }
+        return $records;
+    }
 }

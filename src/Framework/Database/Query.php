@@ -93,7 +93,7 @@ class Query implements IteratorAggregate
      * @param  string $limit
      * @return self
      */
-    public function limit(int $length, int $offset): self
+    public function limit(int $length, int $offset = 0): self
     {
         $this->limit = "$offset, $length";
         return $this;
