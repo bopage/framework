@@ -4,6 +4,7 @@ use App\Account\AccountModule;
 use App\Admin\AdminModule;
 use App\Auth\AuthModule;
 use App\Auth\ForbiddenMiddleware;
+use App\Basket\BasketModule;
 use App\Blog\Action\PostIndexAction;
 use App\Blog\BlogModule;
 use App\Contact\ContactModule;
@@ -38,7 +39,8 @@ $app = (new App(['config/config.php', 'config.php']))
 ->addModule(ShopModule::class)
 ->addModule(BlogModule::class)
 ->addModule(AuthModule::class)
-->addModule(AccountModule::class);
+->addModule(AccountModule::class)
+->addModule(BasketModule::class);
 
 $container = $app->getContainer();
 $container->get(Router::class)->get('/', PostIndexAction::class, 'home');

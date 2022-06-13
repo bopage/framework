@@ -15,6 +15,7 @@ use Framework\Twig\CsrfExtension;
 use Framework\Twig\DebugExtension;
 use Framework\Twig\FlashServiceExtension;
 use Framework\Twig\FormExtension;
+use Framework\Twig\ModuleExtension;
 use Framework\Twig\PagerFantaExtension;
 use Framework\Twig\TextExtension;
 use Framework\Twig\TimeExtension;
@@ -40,6 +41,7 @@ return [
         get(FlashServiceExtension::class),
         get(FormExtension::class),
         get(CsrfExtension::class),
+        get(ModuleExtension::class),
         get(PagerFantaExtension::class)
     ],
     SessionInterface::class => get(PHPSession::class),

@@ -120,7 +120,9 @@ class App implements RequestHandlerInterface
                     $builder->addDefinitions($module::DEFINITIONS);
                 }
             }
-
+            $builder->addDefinitions([
+                App::class => $this
+            ]);
             $this->container = $builder->build();
         }
         return $this->container;
