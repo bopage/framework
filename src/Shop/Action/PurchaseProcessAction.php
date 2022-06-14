@@ -35,19 +35,4 @@ class PurchaseProcessAction
         $this->router = $router;
         $this->flashService = $flashService;
     }
-
-    public function __invoke(ServerRequestInterface $request)
-    {
-        /** @var Product */
-        $product = $this->productTable->find((int)$request->getAttribute('id'));
-        $params = $request->getParsedBody();
-        $stripeToken = $params['stripeToken'];
-        try {
-            $this->purchaseProduct->process($product, $this->auth->getUser(), $stripeToken);
-            $this->flashService->success('Merci pour votre achat');
-            return $this->redirect('shop.dowload', ['id' => $product->getId()]);
-        } catch (AlreadyPurcharsedException $e) {
-            return $this->redirect('shop.show', ['slug' => $product->getSlug()]);
-        }
-    }
 }

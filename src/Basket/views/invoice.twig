@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% block link  %}{% endblock %}
+		<title>{% block title "Mon site" %}</title>
+	</head>
+	<body>
+		<h1>Mon Entreprise</h1>
+		<strong>Yaounde</strong>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Pour</th>
+					<th>Sujet</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{user.firtname}}
+						{{user.lastname}}</td>
+					<td>Achat sur monSite.com</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Facture n°</td>
+					<td>Fact-{{order.createdAt.format('Y')}}-{{order.id}}</td>
+				</tr>
+				<tr>
+					<td>Emise le</td>
+					<td>Achat de
+						{{order.createdAt.format('d/m/Y')}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Prix Unitaire</th>
+					<th>Quantité</th>
+					<th>Prix HT</th>
+					<th>Prix TTC</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for row in order.rows %}				
+				<tr>
+					<td>{{order.product.name}}</td>
+					<td>{{row.price | price_format }}</td>
+					<td>{{row.quantity }}</td>
+					<td>{{(row.price * row.quantity)| price_format }}</td>
+					<td>{{ vat((row.price * row.quantity), order.vat) | price_format }}</td>
+				</tr>
+			{% endfor %}
+				<tr>
+					<td colspan="4">Sous Total</td>
+					<td>
+						<strong>{{order.price | price_format }}</strong>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">Tax
+						{{order.vat | price_format('%') }}
+						</td>
+					<td>
+						<strong>{{vat_only(order.price, order.vat)| price_format }}</strong>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">Total TTC</td>
+					<td>
+						<strong>{{vat(order.price, order.vat) | price_format }}</strong>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<script>
+			window.print()
+		</script>
+	</body>
+</html>

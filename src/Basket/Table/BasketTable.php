@@ -157,4 +157,15 @@ class BasketTable extends Table
             ->fetchAll()
             ->toArray();
     }
+    
+    /**
+     * deleteRows supprime toutes les lignes du panier
+     *
+     * @param  mixed $basket
+     * @return void
+     */
+    public function deleteRows(EntityBasket $basket)
+    {
+        return $this->getPdo()->exec('DELETE FROM baskets_products WHERE basket_id = ' . $basket->getId());
+    }
 }

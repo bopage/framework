@@ -1,45 +1,30 @@
 <?php
-namespace App\Shop;
+namespace App\Basket;
 
 use App\Auth\User;
-use App\Shop\Entity\Product;
-use App\Shop\Exception\AlreadyPurcharsedException;
-use App\shop\Table\PurchaseTable;
+use App\Basket\Table\BasketTable;
+use App\Basket\Table\OrderTable;
 use App\Shop\Table\StripeUserTable;
 use Framework\API\Stripe;
 use Mpociot\VatCalculator\VatCalculator;
 use Stripe\Card;
 use Stripe\Customer;
 
-class PurchaseProduct
+class PurchaseBasket
 {
-    /**
-     * purchaseTable
-     *
-     * @var PurchaseTable
-     */
-    private $purchaseTable;
-
-    /**
-     * stripe
-     *
-     * @var stripe
-     */
+      private $orderTable;
+    private $basketTable;
     private $stripe;
-
-    /**
-     * stripe
-     *
-     * @var stripeUserTable
-     */
     private $stripeUserTable;
 
     public function __construct(
-        PurchaseTable $purchaseTable,
-        stripe $stripe,
+        OrderTable $orderTable,
+        BasketTable $basketTable,
+        Stripe $stripe,
         StripeUserTable $stripeUserTable
     ) {
-        $this->purchaseTable = $purchaseTable;
+        $this->orderTable = $orderTable;
+        $this->basketTable = $basketTable;
         $this->stripe = $stripe;
         $this->stripeUserTable = $stripeUserTable;
     }
@@ -47,21 +32,18 @@ class PurchaseProduct
     /**
      * Génère l'achat du produit en utilisant stripe
      *
-     * @param  Product $product
+     * @param  Basket $basket
      * @param  User $user
      * @param  string $token
      * @return void
      */
-    public function process(Product $product, User $user, string $token)
+    public function process(Basket $basket, User $user, string $token)
     {
-        //vérifie que le produit n'a pas déjà été acheté
-        if ($this->purchaseTable->findFor($product, $user) !== null) {
-            throw new AlreadyPurcharsedException();
-        }
         //Calculer le prix TTC
         $card = $this->stripe->getCardFromClient($token);
+        $this->basketTable->hydrateBasket($basket);
         $vatCalculator = new VatCalculator();
-        $grossPrice = $vatCalculator->calculate($product->getPrice(), $card->country);
+        $grossPrice = $vatCalculator->calculate($basket->getPrice(), $card->country);
         $taxRate = $vatCalculator->getTaxRate();
         //Créer ou récupérer le customer de l'utilisateur. Le customer représente l'utilisateur au niveau de l'api
         $customer = $this->findCustomerForUser($user, $token);
@@ -72,21 +54,17 @@ class PurchaseProduct
         }
         //facturer l'utilisateur (créer la charge)
         $charge = $this->stripe->createCharge([
-            'amount' => $grossPrice * 100,
-            'currency' => 'usd',
+            "amount" => $grossPrice * 100,
+            'currenty' => 'eur',
             'source' => $card->id,
-            'customer' => $customer->id,
-            'description' => "Achat sur monsite.com {$product->getName()}",
+            "description" => "Achat sur monSite.com"
         ]);
         //return $charge->id;
         //Sauvegarger la transaction
-        $this->purchaseTable->insert([
-            "user_id" => $user->getId(),
-            'product_id' => $product->getId(),
-            'price' => $product->getPrice(),
+        $this->orderTable->createFromBasket($basket, [
+            'user_id' => $user->getId(),
             'vat' => $taxRate,
-            'country' => $card->country,
-            'create_at' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
             'stripe_id' => $charge->id
         ]);
     }

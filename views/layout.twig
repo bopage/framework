@@ -38,10 +38,15 @@
 								</li>
 							{% endif %}
 							{% if current_user() %}
-								<li class="nav-item">
-									<a class="nav-link {{ is_subPath('shop.purchases') ? 'active'}}" href="{{ path('shop.purchases') }} ">Mes achats</a>
-
-								</li>
+								{% if module_enabled('basket') %}
+									<li class="nav-item">
+										<a class="nav-link {{ is_subPath('basket.orders') ? 'active'}}" href="{{ path('basket.orders') }} ">Mes commandes</a>
+									</li>
+								{% else %}
+									<li class="nav-item">
+										<a class="nav-link {{ is_subPath('shop.purchases') ? 'active'}}" href="{{ path('shop.purchases') }} ">Mes achats</a>
+									</li>
+								{% endif %}
 								<p class="nav-link">{{current_user() . username}}</p>
 								<form class="nav-item" method='post' action='{{ path('auth.logout') }}'>
 									{{ csrfInput() }}

@@ -17,6 +17,7 @@ use Framework\Twig\FlashServiceExtension;
 use Framework\Twig\FormExtension;
 use Framework\Twig\ModuleExtension;
 use Framework\Twig\PagerFantaExtension;
+use Framework\Twig\PriceExtension;
 use Framework\Twig\TextExtension;
 use Framework\Twig\TimeExtension;
 use Psr\Container\ContainerInterface;
@@ -42,6 +43,7 @@ return [
         get(FormExtension::class),
         get(CsrfExtension::class),
         get(ModuleExtension::class),
+        get(PriceExtension::class),
         get(PagerFantaExtension::class)
     ],
     SessionInterface::class => get(PHPSession::class),

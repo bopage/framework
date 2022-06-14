@@ -86,4 +86,17 @@ class DatabaseBasketTest extends DatabaseTest
         $this->assertEquals(4, $this->basket->getRows()[0]->getQuantity());
         $this->assertEquals(2, $this->basket->getRows()[1]->getQuantity());
     }
+
+    public function testEmptyProduct()
+    {
+        $products = $this->basketTable->getProductTable()
+            ->makeQuery()
+            ->limit(2)
+            ->fetchAll();
+        $this->basket->addProduct($products[0]);
+        $this->basket->addProduct($products[0]);
+        $this->basket->addProduct($products[1], 2);
+        $this->basket->empty();
+        $this->assertEquals(0, $this->rowTable->count());
+    }
 }

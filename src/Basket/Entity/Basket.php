@@ -20,7 +20,7 @@ class Basket
      *
      * @var int
      */
-    private $user_id;
+    private $userId;
 
     /**
      * Get id
@@ -53,7 +53,7 @@ class Basket
      */
     public function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**
@@ -63,9 +63,9 @@ class Basket
      *
      * @return  self
      */
-    public function setUserId(int $user_id)
+    public function setUserId(int $userId)
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }

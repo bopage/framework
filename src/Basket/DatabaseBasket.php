@@ -70,4 +70,10 @@ class DatabaseBasket extends BasketBasket
             }
         }
     }
+
+    public function empty()
+    {
+        $this->basketTable->deleteRows($this->basketEntity);
+        parent::empty();
+    }
 }

@@ -32,7 +32,7 @@ class BasketRow
      *
      * @var int
      */
-    private $quantity;
+    private $quantity = 1;
 
     /**
      * Get product
@@ -86,9 +86,9 @@ class BasketRow
     /**
      * Get quantity
      *
-     * @return  int|null
+     * @return  int
      */
-    public function getQuantity(): ?int
+    public function getQuantity(): int
     {
         return $this->quantity;
     }

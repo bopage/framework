@@ -2,44 +2,11 @@
 
 {% block body %}
 	<h1>Mon panier</h1>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<td>Nom du produit</td>
-				<td>Quantité</td>
-				<td>Prix</td>
-			</tr>
-		</thead>
-		<tbody>
-			{% for row in basket.rows %}
-				<tr>
-					<td>{{row.product.name}}</td>
-					<td>
-						<form action="{{path('basket.change', {id: row.product.id})}}" method="post">
-							{{ csrfInput() }}
-							<div class="input-group mb-3">
-								<input type="number" name="quantity" class="form-control" value="{{row.quantity}}">
-								<button class="btn btn-secondary" type="submit">Changer</button>
-							</div>
-						</form>
-					</td>
-					<td>{{row.product.price | number_format(2, ',')}}
-						€
-					</td>
-				</tr>
-			{% endfor %}
-			<tr>
-				<td colspan="2">Total</td>
-				<td>{{basket.price | number_format(2, ',')}}
-					€</td>
-			</tr>
-		</tbody>
-	</table>
-
+{% include "@basket/basket.twig" %}
 	<p>
 		{% if current_user() %}
 			<!-- Display a payment form -->
-			<form id="payment-form" method="post" action="#">
+			<form id="payment-form" method="post" action="{{path('basket.order.recap')}}">
 				{{ csrfInput() }}
 				<div
 					id="payment-element"><!--Stripe.js injects the Payment Element-->

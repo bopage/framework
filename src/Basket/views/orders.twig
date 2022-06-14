@@ -1,0 +1,40 @@
+{% extends "layout.twig" %}
+
+{% block title 'Mes commandes' %}
+
+{% block body %}
+	<h1>Mes commandes</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td>Nom du produit</td>
+				<td>Prix</td>
+				<td>Date d'achat</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for order in orders %}
+				<tr>
+					<td>
+					<ul>
+					{% for row in order.rows %}
+						<li>{{row.product.name}} * {{row.quantity}}</li>
+					{% endfor %}
+					</ul>
+					</td>
+					<td>{{order.price | price_format }}</td>
+					<td>{{order.createdAt.format('d/m/Y H:i:s')}}</td>
+					<td>
+						{% if order %}
+							<a target="_blank" href="{{path('basket.order.invoice', {id: order.id})}}" class="btn btn-primary">
+								Facture</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{{ paginate(orders, 'basket.orders',)}}
+
+{% endblock %}
