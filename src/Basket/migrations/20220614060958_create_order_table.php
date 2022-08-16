@@ -39,6 +39,6 @@ final class CreateOrderTable extends AbstractMigration
             ->addForeignKey('product_id', 'products', 'id', $constraints)
             ->create();
 
-        //$this->table('purchases')->drop();
+      //  $this->table('purchases')->drop();
     }
 }

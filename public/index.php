@@ -52,7 +52,7 @@ $app->pipe(TrailingSlashMiddleware::class)
     )
     ->pipe(MethodMiddleware::class)
     ->pipe(RendererRequestMiddleware::class)
-    ->pipe(CsrfMiddleware::class)
+   // ->pipe(CsrfMiddleware::class)
     ->pipe(RouterMiddleware::class)
     ->pipe(DispatcherMiddleware::class)
     ->pipe(NotFoundMiddleware::class);

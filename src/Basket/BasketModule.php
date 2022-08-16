@@ -6,6 +6,7 @@ use App\Basket\Action\BasketAction;
 use App\Basket\Action\OrderInvoiceAction;
 use App\Basket\Action\OrderListingAction;
 use App\Basket\Action\OrderRecapAction;
+use App\Basket\Action\Paypal;
 use Framework\Auth\LoggedInMiddleware;
 use Framework\Module;
 use Framework\Renderer\RendererInterface;
@@ -29,6 +30,15 @@ class BasketModule extends Module
         $router->post('/panier/ajouter/{id:\d+}', BasketAction::class, 'basket.add');
         $router->post('/panier/changer/{id:\d+}', BasketAction::class, 'basket.change');
         $router->get('/panier', BasketAction::class, 'basket');
+
+
+        //payment
+         //Tunel d'achat
+         $router->post(
+            '/panier/payment',
+            [LoggedInMiddleware::class, Paypal::class],
+            'basket.order.payment'
+        );
 
         //Tunel d'achat
         $router->post(

@@ -6,14 +6,14 @@
 	<p>
 		{% if current_user() %}
 			<!-- Display a payment form -->
-			<form id="payment-form" method="post" action="{{path('basket.order.recap')}}">
+			<form id="payment-form" method="post" action="{{path('basket.order.payment')}}">
 				{{ csrfInput() }}
 				<div
 					id="payment-element"><!--Stripe.js injects the Payment Element-->
 				</div>
 				<button id="submit">
 					<div class="spinner hidden" id="spinner"></div>
-					<span id="button-text">Pay now</span>
+					<span id="button-text">commander</span>
 				</button>
 				<div id="payment-message" class="hidden"></div>
 			</form>

@@ -46,11 +46,11 @@ class User extends AuthUser
     /**
      * Set firstname
      *
-     * @param  string  $firtname  firtname
+     * @param  string|null  $firtname  firtname
      *
      * @return  self
      */
-    public function setFirstname(string $firstname)
+    public function setFirstname(?string $firstname)
     {
         $this->firstname = $firstname;
 
@@ -70,11 +70,11 @@ class User extends AuthUser
     /**
      * Set lastname
      *
-     * @param  string  $lastname  lastname
+     * @param  string|null  $lastname  lastname
      *
      * @return  self
      */
-    public function setLastname(string $lastname)
+    public function setLastname(?string $lastname)
     {
         $this->lastname = $lastname;
 

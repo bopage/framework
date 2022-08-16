@@ -1,6 +1,7 @@
 <?php
 
 use App\Basket\Action\BasketAction;
+use App\Basket\Action\Paypal;
 use App\Basket\Basket;
 use App\Basket\BasketFactory;
 use App\Basket\Twig\BasketTwigExtension;
@@ -15,5 +16,6 @@ return [
     get(BasketTwigExtension::class)
 ]),
 Basket::class => factory(BasketFactory::class),
-BasketAction::class => autowire()->constructorParameter('stripeKey', get('stripe.key'))
+BasketAction::class => autowire()->constructorParameter('stripeKey', get('stripe.key')),
+Paypal::class => autowire()->constructorParameter('paypalKey', get('paypal.key'))
 ];

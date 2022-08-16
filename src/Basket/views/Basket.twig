@@ -25,20 +25,20 @@
                     {% endif %}
 					</td>
 					<td>{{row.product.price | price_format }}
-						€
+						
 					</td>
 				</tr>
 			{% endfor %}
 			<tr>
 				<td colspan="2">Total HT</td>
 				<td>{{basket.price | price_format }}
-					€</td>
+					</td>
 			</tr>
             {% if vat %}
 			<tr>
 				<td colspan="2">Total TTC (Tva {{vat | price_format('%')}})</td>
 				<td>{{(basket.price * (vat + 100)/ 100 )| price_format }}
-					€</td>
+					</td>
 			</tr>
             {% endif %}
             
